@@ -1,0 +1,45 @@
+{
+    "name": "InputScheme",
+    "maps": [
+        {
+            "name": "Movement",
+            "id": "a7c03c44-5489-4c5b-9c84-dfef754cf390",
+            "actions": [
+                {
+                    "name": "Touch",
+                    "type": "Button",
+                    "id": "868f3664-9dfe-47c8-9e9b-83c5078e05f3",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "39b90e71-30cb-409e-92fb-94d4bf122a8c",
+                    "path": "",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Touch",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        }
+    ],
+    "controlSchemes": [
+        {
+            "name": "Mobile And Keyboard",
+            "bindingGroup": "Mobile And Keyboard",
+            "devices": []
+        },
+        {
+            "name": "Mobile",
+            "bindingGroup": "Mobile",
+            "devices": []
+        }
+    ]
+}
