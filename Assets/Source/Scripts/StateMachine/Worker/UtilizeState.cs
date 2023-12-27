@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -13,7 +11,7 @@ namespace BuilderStory
         private readonly LayerMask _layerMask;
         private float _interactDistance;
 
-        public UtilizeState(Worker worker ,Lift lift, NavMeshAgent navMeshAgent, float interactDistance, LayerMask layerMask)
+        public UtilizeState(Worker worker, Lift lift, NavMeshAgent navMeshAgent, float interactDistance, LayerMask layerMask)
         {
             _worker = worker;
             _lift = lift;
@@ -57,7 +55,7 @@ namespace BuilderStory
                     continue;
                 }
 
-                if (buildable.TryPlaceMaterial(_lift.FirstLiftable, out Transform destination) == false)
+                if (buildable.CouldPlaceMaterial(_lift.FirstLiftable) == false)
                 {
                     return true;
                 }

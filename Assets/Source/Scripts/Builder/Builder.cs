@@ -53,12 +53,6 @@ namespace BuilderStory
                 worker.InstallMaterial(_structure.transform, warehousePoint, trashPoint);
                 yield return delay;
             }
-
-            foreach (var worker in _workers)
-            {
-                var trashPoint = _navigator.GetRandomTrashPoint();
-                worker.UtilizeMaterial(trashPoint);
-            }
         }
 
         private bool TryGetFreeWorker(out Worker result)

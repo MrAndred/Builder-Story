@@ -2835,15 +2835,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2375628713135618549, guid: d4082392f1da92144ac043faaf44860c, type: 3}
       propertyPath: m_Speed
-      value: 2
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 2375628713135618549, guid: d4082392f1da92144ac043faaf44860c, type: 3}
       propertyPath: m_Radius
-      value: 1
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 2375628713135618549, guid: d4082392f1da92144ac043faaf44860c, type: 3}
       propertyPath: m_Acceleration
-      value: 1
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 2375628713135618549, guid: d4082392f1da92144ac043faaf44860c, type: 3}
       propertyPath: m_AngularSpeed
@@ -2851,7 +2851,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2375628713135618549, guid: d4082392f1da92144ac043faaf44860c, type: 3}
       propertyPath: m_StoppingDistance
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2601242088771524250, guid: d4082392f1da92144ac043faaf44860c, type: 3}
       propertyPath: _maxCapacity
