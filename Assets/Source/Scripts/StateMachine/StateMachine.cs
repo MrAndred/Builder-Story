@@ -1,15 +1,20 @@
+using System;
+using System.Collections.Generic;
+
 namespace BuilderStory
 {
     public class StateMachine
     {
         private IBehaviour _currentBehaviour;
+        private Dictionary<Type, IBehaviour> _behaviours;
 
-        public StateMachine(IBehaviour startBehaviour)
+        public StateMachine( IBehaviour startBehaviour, Dictionary<Type, IBehaviour> behaviours)
         {
             Reset();
 
             _currentBehaviour = startBehaviour;
             _currentBehaviour.Enter();
+            _behaviours = behaviours;
         }
 
         public IBehaviour CurrentState => _currentBehaviour;
@@ -17,6 +22,20 @@ namespace BuilderStory
         public void Update()
         {
             _currentBehaviour?.Update();
+
+            foreach (var behaviour in _behaviours)
+            {
+                if (behaviour.Value == _currentBehaviour)
+                {
+                    continue;
+                }
+
+                if (behaviour.Value.IsReady())
+                {
+                    ChangeState(behaviour.Value);
+                    break;
+                }
+            }
         }
 
         public void Reset()

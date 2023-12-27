@@ -25,7 +25,6 @@ namespace BuilderStory
             {
                 if (!instance.gameObject.activeSelf)
                 {
-                    instance.gameObject.SetActive(true);
                     return instance;
                 }
             }

@@ -41,15 +41,21 @@ namespace BuilderStory
                 if (
                     TryGetFreeWorker(out Worker worker) == false
                     || _structure.TryGetBuildMaterial(out BuildMaterial material) == false
-                    || _navigator.TryGetMaterialPosition(material, out Transform warehousePosition) == false
+                    || _navigator.TryGetMaterialPosition(material, out Transform warehousePoint) == false
                 )
                 {
                     yield return delay;
                     continue;
                 }
 
-                worker.InstallMaterial(_structure.transform, warehousePosition);
+                worker.InstallMaterial(_structure.transform, warehousePoint);
                 yield return delay;
+            }
+
+            foreach (var worker in _workers)
+            {
+                var trashPoint = _navigator.GetRandomTrashPoint();
+                worker.UtilizeMaterial(trashPoint);
             }
         }
 

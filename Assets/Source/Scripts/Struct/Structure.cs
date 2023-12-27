@@ -5,8 +5,9 @@ namespace BuilderStory
     public class Structure : MonoBehaviour, IBuildable
     {
         [SerializeField] private StructureMaterial[] _structMaterials;
+        [SerializeField] private float _placeDuration = 3f;
 
-        private void OnValidate()
+        private void Awake()
         {
             var materials = GetComponentsInChildren<BuildMaterial>();
 
@@ -14,7 +15,16 @@ namespace BuilderStory
 
             for (int i = 0; i < materials.Length; i++)
             {
-                _structMaterials[i] = new StructureMaterial(materials[i]);
+                var meshRenderer = materials[i].GetComponent<MeshRenderer>();
+                _structMaterials[i] = new StructureMaterial(materials[i], meshRenderer, _placeDuration);
+            }
+        }
+
+        private void OnDisable()
+        {
+            foreach (var material in _structMaterials)
+            {
+                material.Disable();
             }
         }
 

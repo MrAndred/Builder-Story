@@ -1,38 +1,41 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 namespace BuilderStory
 {
-    [RequireComponent(typeof(Movement), typeof(Lift))]
+    [RequireComponent(typeof(Lift))]
     public class Worker : MonoBehaviour, IWorkable
     {
+        [SerializeField] private Animator _animator;
+        [SerializeField] private NavMeshAgent _navMeshAgent;
         [SerializeField] private LayerMask _layerMask;
         [SerializeField] private float _interactDistance;
 
         [SerializeField] private Transform _pickupPoint;
 
-        [SerializeField] private Movement _movement;
         [SerializeField] private Lift _lift;
 
         private Dictionary<Type, IBehaviour> _behaviours;
         private IBehaviour _startBehaviour;
 
         private StateMachine _stateMachine;
+        private Transform _buildingPoint;
         private bool _isInitialized;
 
         public bool IsBusy { get; private set; }
 
         private void OnEnable()
         {
-            _lift.PickedUp += OnLiftPickedUp;
-            _lift.Placed += OnLiftPlaced;
+            _lift.Loaded += OnLoaded;
+            _lift.Unloaded += OnUnloaded;
         }
 
         private void OnDisable()
         {
-            _lift.PickedUp -= OnLiftPickedUp;
-            _lift.Placed -= OnLiftPlaced;
+            _lift.Loaded -= OnLoaded;
+            _lift.Unloaded -= OnUnloaded;
         }
 
         private void Update()
@@ -49,78 +52,52 @@ namespace BuilderStory
         {
             var behaviours = new Dictionary<Type, IBehaviour>
             {
-                {typeof(IdleState), new IdleState(this)},
-                {typeof(MovingState), new MovingState(_movement, _interactDistance, _layerMask)},
-                {typeof(PickupState), new PickupState(_lift, _pickupPoint, _interactDistance, _layerMask )},
-                {typeof(PlacementState), new PlacementState( _lift, _interactDistance, _layerMask)}
+                {typeof(IdleState), new IdleState(_animator, this)},
+                {typeof(MovingState), new MovingState(_animator, _navMeshAgent, _interactDistance )},
+                {typeof(PickupState), new PickupState(_animator, _lift, _pickupPoint, _interactDistance, _layerMask )},
+                {typeof(PlacementState), new PlacementState(_animator, _lift, _interactDistance, _layerMask)}
             };
 
             _startBehaviour = behaviours[typeof(IdleState)];
             _behaviours = behaviours;
 
-            _stateMachine = new StateMachine(_startBehaviour);
+            _stateMachine = new StateMachine(_startBehaviour, behaviours);
 
             _isInitialized = true;
         }
 
-        public void InstallMaterial(Transform buildPosition, Transform materialPosition)
+        public void InstallMaterial(Transform buildingPoint, Transform materialPoint)
         {
-            _lift.Destination = buildPosition;
-
+            _buildingPoint = buildingPoint;
+            _navMeshAgent.SetDestination(materialPoint.position);
             IsBusy = true;
-
-            _movement.SetTargetPosition(materialPosition.position);
-            IBehaviour behaviour = _behaviours[typeof(MovingState)];
-
-            if (behaviour.IsReady() == true)
-            {
-                _stateMachine.ChangeState(behaviour);
-                _movement.TargetReached += OnTargetReached;
-            }
         }
 
-        private void OnTargetReached()
-        {
-            _movement.TargetReached -= OnTargetReached;
-
-            IBehaviour[] transitionBehaviours = new IBehaviour[]
-            {
-                _behaviours[typeof(PickupState)],
-                _behaviours[typeof(PlacementState)]
-            };
-
-            foreach (IBehaviour behaviour in transitionBehaviours)
-            {
-                if (behaviour.IsReady() == true)
-                {
-                    _stateMachine.ChangeState(behaviour);
-                    break;
-                }
-            }
-        }
-
-        private void OnLiftPickedUp()
-        {
-            if (_lift.IsFull == true)
-            {
-                _movement.SetTargetPosition(_lift.Destination.position);
-                IBehaviour behaviour = _behaviours[typeof(MovingState)];
-
-                if (behaviour.IsReady() == true)
-                {
-                    _stateMachine.ChangeState(behaviour);
-                    _movement.TargetReached += OnTargetReached;
-                }
-            }
-        }
-
-        private void OnLiftPlaced()
+        public void UtilizeMaterial(Transform warehousePoint)
         {
             if (_lift.IsEmpty == true)
             {
-                _stateMachine.ChangeState(_startBehaviour);
-                IsBusy = false;
+                return;
             }
+
+            _navMeshAgent.SetDestination(warehousePoint.position);
+            IsBusy = true;
+        }
+
+        private void OnLoaded()
+        {
+            if (_buildingPoint == null)
+            {
+                return;
+            }
+
+            _navMeshAgent.SetDestination(_buildingPoint.position);
+        }
+
+        private void OnUnloaded()
+        {
+            _navMeshAgent.ResetPath();
+            IsBusy = false;
         }
     }
 }

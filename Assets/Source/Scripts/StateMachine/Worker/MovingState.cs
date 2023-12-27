@@ -1,54 +1,44 @@
 using UnityEngine;
+using UnityEngine.AI;
 
 namespace BuilderStory
 {
     public class MovingState : IBehaviour
     {
-        private readonly float _stopDistance;
-        private readonly Movement _movement;
-        private Transform _movable;
-        private LayerMask _layerMask;
+        private const string Speed = "Speed";
+        private const float MinSpeed = 0f;
 
-        public MovingState(Movement movement, float stopDistance, LayerMask layerMask)
+        private readonly Animator _animator;
+        private readonly float _stopDistance;
+        private readonly NavMeshAgent _agent;
+
+        public MovingState(Animator animator, NavMeshAgent agent, float stopDistance)
         {
-            _movement = movement;
-            _movable = movement.transform;
+            _agent = agent;
             _stopDistance = stopDistance;
-            _layerMask = layerMask;
+            _animator = animator;
         }
 
         public void Update()
         {
+            _animator.SetFloat(Speed, _agent.velocity.magnitude / _agent.speed);
         }
 
         public void Enter()
         {
-            Vector3 direction = (_movement.TargetPosition - _movable.position).normalized;
 
-            Vector3 predictedPosition = Physics.Linecast(
-                _movable.position,
-                _movement.TargetPosition + direction * _stopDistance,
-                out var hitInfo,
-                _layerMask)
-            ? hitInfo.point - direction
-            : _movement.TargetPosition;
-            
-            _movement.MoveTo(predictedPosition);
         }
 
         public void Exit()
         {
-            _movement.Stop();
+            _agent.ResetPath();
+            _animator.SetFloat(Speed, MinSpeed);
+            _agent.velocity = Vector3.zero;
         }
 
         public bool IsReady()
         {
-            if (_movement.TargetPosition == Vector3.zero)
-            {
-                return false;
-            }
-
-            return Vector3.Distance(_movable.position, _movement.TargetPosition) > _stopDistance;
+            return _agent.remainingDistance > _stopDistance;
         }
     }
 }

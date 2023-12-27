@@ -1,12 +1,21 @@
-using System;
 using DG.Tweening;
+using System;
 using UnityEngine;
 
 namespace BuilderStory
 {
     public class BuildMaterial : MonoBehaviour, ILiftable
     {
+        private readonly int _jumpCount = 1;
+
         [SerializeField] private MaterialType _type;
+        [SerializeField] private float _jumpForce = 5f;
+
+        private Sequence _pickupSequence;
+        private Sequence _placeSequence;
+
+        private Transform _parent;
+        private Vector3 _originScale;
 
         public event Action<ILiftable> OnPickedUp;
 
@@ -20,36 +29,74 @@ namespace BuilderStory
 
         public Transform Transform => transform;
 
+        private void OnEnable()
+        {
+            _parent = transform.parent;
+            _originScale = transform.localScale;
+        }
+
+        private void OnDisable()
+        {
+            _pickupSequence?.Kill();
+        }
+
         public void PickUp(Transform point, float duration)
         {
             transform.SetParent(point);
-            transform
-                .DOLocalMove(Vector3.zero, duration)
-                .SetEase(Ease.OutFlash)
-                .OnComplete(() =>
-                {
-                    OnPickedUp?.Invoke(this);
-                    IsPickedUp = true;
-                });
 
-            transform.DOScale(Vector3.one, duration)
+            Tween jump = transform.DOLocalJump(Vector3.zero, _jumpForce, _jumpCount, duration)
+                .SetEase(Ease.OutFlash);
+
+             Tween rotate = transform.DOLocalRotate(Vector3.zero, duration)
                 .SetEase(Ease.Linear);
+
+            _pickupSequence = DOTween.Sequence();
+
+            _pickupSequence.Append(jump);
+            _pickupSequence.Join(rotate);
+
+            _pickupSequence.OnComplete(() =>
+            {
+                OnPickedUp?.Invoke(this);
+                IsPickedUp = true;
+            });
+
+            _pickupSequence.Play();
         }
 
         public void Place(Transform point, float duration)
         {
-            transform.SetParent(point);
-            transform.DOScale(Vector3.one, duration)
+            transform.SetParent(null);
+
+            Tween scale = transform.DOScale(Vector3.zero, duration)
                 .SetEase(Ease.Linear);
-            transform.DOLocalRotate(Vector3.zero, duration)
+
+            Tween rotate = transform.DOLocalRotate(Vector3.zero, duration)
                 .SetEase(Ease.Linear);
-            transform.DOLocalMove(Vector3.zero, duration)
-                .SetEase(Ease.OutFlash)
-                .OnComplete(() =>
-                {
-                    OnPlaced?.Invoke(this);
-                    IsPlaced = true;
-                });
+
+            Tween jump = transform.DOJump(point.transform.position, _jumpForce, _jumpCount, duration);
+
+            _placeSequence = DOTween.Sequence();
+
+            _placeSequence.Append(scale);
+            _placeSequence.Join(rotate);
+            _placeSequence.Join(jump);
+
+            _placeSequence.OnComplete(() =>
+            {
+                OnPlaced?.Invoke(this);
+                IsPlaced = true;
+                gameObject.SetActive(false);
+                ResetOptions();
+            });
+        }
+
+        private void ResetOptions()
+        {
+            transform.SetParent(_parent);
+            transform.localPosition = Vector3.zero;
+            transform.localRotation = Quaternion.identity;
+            transform.localScale = _originScale;
         }
     }
 }
