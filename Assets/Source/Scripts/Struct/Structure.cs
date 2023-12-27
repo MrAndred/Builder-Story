@@ -43,6 +43,19 @@ namespace BuilderStory
             return false;
         }
 
+        public bool CouldPlaceMaterial(ILiftable material)
+        {
+            foreach (var structMaterial in _structMaterials)
+            {
+                if (structMaterial.IsPlaced == false && structMaterial.Material.Type == material.Type)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
         public bool TryPlaceMaterial(ILiftable material, out Transform destination)
         {
             foreach (var structMaterial in _structMaterials)
@@ -57,6 +70,11 @@ namespace BuilderStory
 
             destination = null;
             return false;
+        }
+
+        public void PlaceMaterial(StructureMaterial structMaterial)
+        {
+            structMaterial.Place();
         }
 
         public bool IsBuilt()

@@ -22,7 +22,10 @@ namespace BuilderStory
 
         private StateMachine _stateMachine;
         private Transform _buildingPoint;
+        private Transform _trashPoint;
         private bool _isInitialized;
+
+        public Vector3 TrashPosition => _trashPoint.position;
 
         public bool IsBusy { get; private set; }
 
@@ -45,6 +48,7 @@ namespace BuilderStory
                 return;
             }
 
+            Debug.Log(_stateMachine.CurrentState);
             _stateMachine.Update();
         }
 
@@ -55,7 +59,8 @@ namespace BuilderStory
                 {typeof(IdleState), new IdleState(_animator, this)},
                 {typeof(MovingState), new MovingState(_animator, _navMeshAgent, _interactDistance )},
                 {typeof(PickupState), new PickupState(_animator, _lift, _pickupPoint, _interactDistance, _layerMask )},
-                {typeof(PlacementState), new PlacementState(_animator, _lift, _interactDistance, _layerMask)}
+                {typeof(PlacementState), new PlacementState(_animator, _lift, _interactDistance, _layerMask)},
+                {typeof(UtilizeState), new UtilizeState(this, _lift, _navMeshAgent, _interactDistance, _layerMask)}
             };
 
             _startBehaviour = behaviours[typeof(IdleState)];
@@ -66,9 +71,10 @@ namespace BuilderStory
             _isInitialized = true;
         }
 
-        public void InstallMaterial(Transform buildingPoint, Transform materialPoint)
+        public void InstallMaterial(Transform buildingPoint, Transform materialPoint, Transform trashPoint)
         {
             _buildingPoint = buildingPoint;
+            _trashPoint = trashPoint;
             _navMeshAgent.SetDestination(materialPoint.position);
             IsBusy = true;
         }

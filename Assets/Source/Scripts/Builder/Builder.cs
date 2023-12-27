@@ -48,7 +48,9 @@ namespace BuilderStory
                     continue;
                 }
 
-                worker.InstallMaterial(_structure.transform, warehousePoint);
+                var trashPoint = _navigator.GetRandomTrashPoint();
+
+                worker.InstallMaterial(_structure.transform, warehousePoint, trashPoint);
                 yield return delay;
             }
 

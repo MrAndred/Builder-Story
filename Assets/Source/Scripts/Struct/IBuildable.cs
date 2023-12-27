@@ -6,6 +6,8 @@ namespace BuilderStory
     {
         public bool TryGetBuildMaterial(out BuildMaterial buildMaterial);
 
+        public bool CouldPlaceMaterial(ILiftable material);
+
         public bool TryPlaceMaterial(ILiftable liftable, out Transform destination);
 
         public bool IsBuilt();

@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace BuilderStory
@@ -16,6 +14,11 @@ namespace BuilderStory
         public bool TryGetBuildMaterial(out BuildMaterial buildMaterial)
         {
             buildMaterial = null;
+            return true;
+        }
+
+        public bool CouldPlaceMaterial(ILiftable material)
+        {
             return true;
         }
 
