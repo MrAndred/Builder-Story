@@ -16,7 +16,7 @@ namespace BuilderStory
 
         public event Action Unloaded;
 
-        public ILiftable FirstLiftable => _liftables.First();
+        public ILiftable FirstLiftable => _liftables.FirstOrDefault();
 
         public float Duration => _liftDuration;
 

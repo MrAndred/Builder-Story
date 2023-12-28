@@ -1977,11 +1977,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3351176493289402102, guid: 0045f7ae018e9974b897679ea8b37129, type: 3}
       propertyPath: _maxCapacity
-      value: 15
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 3351176493289402102, guid: 0045f7ae018e9974b897679ea8b37129, type: 3}
       propertyPath: _liftDuration
-      value: 0.1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 4221654252747391028, guid: 0045f7ae018e9974b897679ea8b37129, type: 3}
       propertyPath: _animator
@@ -9932,7 +9932,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8ce1361b227d4594592dac36bad8b657, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _offset: {x: 0, y: 4.867055, z: -4.788663}
+  _offset: {x: 0, y: 9.73411, z: -12.56}
 --- !u!114 &2015100193 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 7952119387087529554, guid: 0045f7ae018e9974b897679ea8b37129, type: 3}

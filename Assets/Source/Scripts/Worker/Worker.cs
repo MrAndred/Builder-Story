@@ -48,7 +48,6 @@ namespace BuilderStory
                 return;
             }
 
-            Debug.Log(_stateMachine.CurrentState);
             _stateMachine.Update();
         }
 
