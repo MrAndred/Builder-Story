@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "com.agava.yandexgames": "file:C:/Users/Andrew Areshko/Downloads/com.agava.yandexgames-master/com.agava.yandexgames-master",
     "com.unity.ai.navigation": "1.1.5",
     "com.unity.collab-proxy": "2.2.0",
     "com.unity.feature.development": "1.0.1",

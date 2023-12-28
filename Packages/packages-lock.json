@@ -1,5 +1,11 @@
 {
   "dependencies": {
+    "com.agava.yandexgames": {
+      "version": "file:C:/Users/Andrew Areshko/Downloads/com.agava.yandexgames-master/com.agava.yandexgames-master",
+      "depth": 0,
+      "source": "local",
+      "dependencies": {}
+    },
     "com.unity.ai.navigation": {
       "version": "1.1.5",
       "depth": 0,
