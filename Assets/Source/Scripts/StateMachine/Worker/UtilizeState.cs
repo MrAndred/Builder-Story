@@ -5,15 +5,15 @@ namespace BuilderStory
 {
     public class UtilizeState : IBehaviour
     {
-        private readonly Worker _worker;
+        private readonly Navigator _navigator;
         private readonly NavMeshAgent _navMeshAgent;
         private readonly Lift _lift;
         private readonly LayerMask _layerMask;
         private float _interactDistance;
 
-        public UtilizeState(Worker worker, Lift lift, NavMeshAgent navMeshAgent, float interactDistance, LayerMask layerMask)
+        public UtilizeState(Navigator nagiator, Lift lift, NavMeshAgent navMeshAgent, float interactDistance, LayerMask layerMask)
         {
-            _worker = worker;
+            _navigator = nagiator;
             _lift = lift;
             _navMeshAgent = navMeshAgent;
             _interactDistance = interactDistance;
@@ -22,7 +22,9 @@ namespace BuilderStory
 
         public void Enter()
         {
-            _navMeshAgent.SetDestination(_worker.TrashPosition);
+            var trashPoint = _navigator.GetRandomTrashPoint();
+
+            _navMeshAgent.SetDestination(trashPoint.position);
         }
 
         public void Exit()
@@ -31,7 +33,7 @@ namespace BuilderStory
 
         public bool IsReady()
         {
-            if (_navMeshAgent.remainingDistance > _interactDistance)
+            if (_navMeshAgent.hasPath == true)
             {
                 return false;
             }
@@ -55,7 +57,7 @@ namespace BuilderStory
                     continue;
                 }
 
-                if (buildable.CouldPlaceMaterial(_lift.FirstLiftable) == false)
+                if (buildable.CouldPlaceMaterial(_lift.LastLiftable) == false)
                 {
                     return true;
                 }

@@ -16,7 +16,7 @@ namespace BuilderStory
 
         public event Action Unloaded;
 
-        public ILiftable FirstLiftable => _liftables.FirstOrDefault();
+        public ILiftable LastLiftable => _liftables.LastOrDefault();
 
         public float Duration => _liftDuration;
 
@@ -24,33 +24,38 @@ namespace BuilderStory
 
         public bool IsEmpty => _liftables.Count == 0;
 
+        public bool IsLifting { get; private set; } = false;
+
         public void PickUp(ILiftable liftable, Transform point)
         {
-            if (_liftables.Count >= _maxCapacity)
+            if (IsLifting == true || _liftables.Count >= _maxCapacity)
             {
                 return;
             }
 
             liftable.PickUp(point, _liftDuration);
-            liftable.OnPickedUp += PickUp;
+            liftable.OnPickedUp += PickedUp;
             _liftables.Add(liftable);
+            IsLifting = true;
         }
 
         public void Place(ILiftable liftable, Transform point)
         {
-            if (_liftables.Count <= 0f)
+            if (IsLifting == true || _liftables.Count <= 0f)
             {
                 return;
             }
 
             liftable.Place(point, _liftDuration);
-            liftable.OnPlaced += Place;
+            liftable.OnPlaced += Placed;
             _liftables.Remove(liftable);
+            IsLifting = true;
         }
 
-        private void PickUp(ILiftable liftable)
+        private void PickedUp(ILiftable liftable)
         {
-            liftable.OnPickedUp -= PickUp;
+            liftable.OnPickedUp -= PickedUp;
+            IsLifting = false;
 
             if (_liftables.Count >= _maxCapacity)
             {
@@ -58,9 +63,10 @@ namespace BuilderStory
             }
         }
 
-        private void Place(ILiftable liftable)
+        private void Placed(ILiftable liftable)
         {
-            liftable.OnPlaced -= Place;
+            liftable.OnPlaced -= Placed;
+            IsLifting = false;
 
             if (_liftables.Count <= 0f)
             {

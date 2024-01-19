@@ -39,7 +39,7 @@ namespace BuilderStory
 
         public bool IsReady()
         {
-            if (_lift.IsEmpty)
+            if (_lift.IsEmpty || _lift.IsLifting)
             {
                 return false;
             }
@@ -63,7 +63,7 @@ namespace BuilderStory
                     continue;
                 }
 
-                if (buildable.CouldPlaceMaterial(_lift.FirstLiftable) == true)
+                if (buildable.CouldPlaceMaterial(_lift.LastLiftable) == true)
                 {
                     _buildable = buildable;
                     return true;
@@ -83,13 +83,13 @@ namespace BuilderStory
 
             while (_lift.IsEmpty == false)
             {
-                if (_buildable.TryPlaceMaterial(_lift.FirstLiftable, out Transform destination) == false)
+                if (_buildable.TryPlaceMaterial(_lift.LastLiftable, out Transform destination) == false)
                 {
                     break;
                 }
 
                 _animator.SetTrigger(Placement);
-                _lift.Place(_lift.FirstLiftable, destination);
+                _lift.Place(_lift.LastLiftable, destination);
 
                 yield return delay;
             }

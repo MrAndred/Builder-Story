@@ -6,10 +6,11 @@ namespace BuilderStory
 {
     public class BuildMaterial : MonoBehaviour, ILiftable
     {
-        private readonly int _jumpCount = 1;
+        private const int _jumpCount = 1;
+        private const float _rotateDuration = 0.4f;
 
         [SerializeField] private MaterialType _type;
-        [SerializeField] private float _jumpForce = 5f;
+        [SerializeField] private float _jumpForce = 3f;
 
         private Sequence _pickupSequence;
         private Sequence _placeSequence;
@@ -27,7 +28,7 @@ namespace BuilderStory
 
         public bool IsPickedUp { get; private set; }
 
-        public Transform Transform => transform;
+        public Transform Point => transform;
 
         private void OnEnable()
         {
@@ -47,7 +48,7 @@ namespace BuilderStory
             Tween jump = transform.DOLocalJump(Vector3.zero, _jumpForce, _jumpCount, duration)
                 .SetEase(Ease.OutFlash);
 
-             Tween rotate = transform.DOLocalRotate(Vector3.zero, duration)
+             Tween rotate = transform.DOLocalRotate(Vector3.zero, _rotateDuration, RotateMode.Fast)
                 .SetEase(Ease.Linear);
 
             _pickupSequence = DOTween.Sequence();
@@ -71,7 +72,7 @@ namespace BuilderStory
             Tween scale = transform.DOScale(Vector3.zero, duration)
                 .SetEase(Ease.Linear);
 
-            Tween rotate = transform.DOLocalRotate(Vector3.zero, duration)
+            Tween rotate = transform.DOLocalRotate(Vector3.zero, _rotateDuration, RotateMode.Fast)
                 .SetEase(Ease.Linear);
 
             Tween jump = transform.DOJump(point.transform.position, _jumpForce, _jumpCount, duration);

@@ -1,4 +1,5 @@
 ﻿using DG.Tweening;
+using System;
 using UnityEngine;
 
 namespace BuilderStory
@@ -9,7 +10,11 @@ namespace BuilderStory
         private float _placeDuration;
         private Sequence _place;
 
+        public event Action Placed;
+
         public bool IsPlaced { get; private set; }
+
+        public Transform Point => Material.Point;
 
         public BuildMaterial Material { get; private set; }
 
@@ -41,6 +46,11 @@ namespace BuilderStory
             _place.Append(scale);
 
             _place.Play();
+
+            _place.OnComplete(() =>
+            {
+                Placed?.Invoke();
+            });
         }
     }
 }

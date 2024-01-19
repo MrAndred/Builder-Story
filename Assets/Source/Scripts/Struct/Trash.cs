@@ -6,6 +6,8 @@ namespace BuilderStory
     {
         [SerializeField] private Transform _trashPoint;
 
+        public bool IsBuilding { get; private set; } = true;
+
         public bool IsBuilt()
         {
             return false;
@@ -26,6 +28,11 @@ namespace BuilderStory
         {
             destination = _trashPoint;
             return true;
+        }
+
+        public Transform GetMaterialPoint(ILiftable material)
+        {
+            return _trashPoint;
         }
     }
 }

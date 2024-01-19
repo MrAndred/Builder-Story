@@ -46,13 +46,13 @@ namespace BuilderStory
 
         private void Move(Vector3 direction)
         {
-            _rigidbody.MovePosition(_rigidbody.position + (direction * _speed * Time.deltaTime));
+            _rigidbody.MovePosition(_rigidbody.position + (direction * _speed * Time.fixedDeltaTime));
         }
 
         private void Rotate(Vector3 direction)
         {
             Quaternion rotation = Quaternion.LookRotation(direction);
-            _rigidbody.MoveRotation(Quaternion.RotateTowards(_rigidbody.rotation, rotation, _rotationSpeed * Time.deltaTime));
+            _rigidbody.MoveRotation(Quaternion.RotateTowards(_rigidbody.rotation, rotation, _rotationSpeed * Time.fixedDeltaTime));
         }
     }
 }

@@ -45,7 +45,7 @@ namespace BuilderStory
 
         public bool IsReady()
         {
-            if (_lift.IsFull)
+            if (_lift.IsFull || _lift.IsLifting)
             {
                 return false;
             }
