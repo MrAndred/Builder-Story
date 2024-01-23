@@ -5,6 +5,8 @@ namespace BuilderStory
 {
     public class Reputation
     {
+        private const int AddReputation = 1;
+
         public Reputation(int current, int max, int moneyMultiplier)
         {
             Max = max;
@@ -22,12 +24,12 @@ namespace BuilderStory
 
         public void Add()
         {
-            if (Current + 1 > Max)
+            if (Current + AddReputation > Max)
             {
                 return;
             }
 
-            Current += 1;
+            Current += AddReputation;
             ReputationChanged?.Invoke();
         }
     }

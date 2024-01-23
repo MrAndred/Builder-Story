@@ -37,14 +37,14 @@ namespace BuilderStory
             _stateMachine.Update();
         }
 
-        public void Init(IBuildable[] buildables, Navigator navigator)
+        public void Init(Structure[] buildables, Navigator navigator)
         {
             _buildables = buildables;
             _navigator = navigator;
 
             var behaviours = new Dictionary<Type, IBehaviour>
             {
-                {typeof(WaitingBuildState), new WaitingBuildState(_animator, buildables, this)},
+                {typeof(WaitingBuildState), new WaitingBuildState(_animator, buildables, _lift)},
                 {typeof(MovingState), new MovingState(_animator, _navMeshAgent, _interactDistance )},
                 {typeof(PickupState), new PickupState(_animator, _lift, _pickupPoint, _interactDistance, _layerMask )},
                 {typeof(PlacementState), new PlacementState(_animator, _lift, _interactDistance, _layerMask)},

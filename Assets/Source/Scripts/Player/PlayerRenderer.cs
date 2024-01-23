@@ -1,7 +1,5 @@
-using DG.Tweening;
 using System;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace BuilderStory
 {
@@ -9,6 +7,8 @@ namespace BuilderStory
     {
         [SerializeField] private ContractRenderer _contractRenderer;
         [SerializeField] private ContractInfoRenderer _contractInfoRenderer;
+
+        private Structure _structure;
 
         public event Action OnContractAccepted;
 
@@ -26,9 +26,10 @@ namespace BuilderStory
             _contractRenderer.OnBuildClicked -= ContractAccepted;
         }
 
-        public void Show(IBuildable buildable)
+        public void Show(Structure structure)
         {
             _contractInfoRenderer.Show();
+            _structure = structure;
         }
 
         public void Hide()
@@ -39,7 +40,7 @@ namespace BuilderStory
         private void InfoClicked()
         {
             _contractInfoRenderer.Hide();
-            _contractRenderer.Show();
+            _contractRenderer.Show(_structure);
         }
 
         private void ContractClosed()

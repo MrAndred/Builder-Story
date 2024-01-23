@@ -4,15 +4,11 @@ namespace BuilderStory
 {
     public class CameraFollow : MonoBehaviour
     {
-        private const float _smoothTime = 0.23f;
-
         [SerializeField] private Vector3 _offset;
 
         private Player _player;
         private Camera _camera;
         private bool _isInitialized;
-
-        private Vector3 _velocity = Vector3.zero;
 
         public void Init(Player player)
         {
@@ -21,7 +17,7 @@ namespace BuilderStory
             _isInitialized = true;
         }
 
-        private void FixedUpdate()
+        private void LateUpdate()
         {
             if (!_isInitialized)
             {
@@ -33,8 +29,7 @@ namespace BuilderStory
 
         private void Follow()
         {
-            Vector3 targetPosition = _player.transform.position + _offset;
-            _camera.transform.position = Vector3.SmoothDamp(_camera.transform.position, targetPosition, ref _velocity, _smoothTime);
+            _camera.transform.position = _player.transform.position + _offset;
         }
     }
 }

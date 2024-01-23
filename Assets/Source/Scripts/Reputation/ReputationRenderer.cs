@@ -1,16 +1,18 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using DG.Tweening;
 
 namespace BuilderStory
 {
     public class ReputationRenderer : MonoBehaviour
     {
+        private const float FillingDuration = 0.5f;
+
         [SerializeField] private Slider _reputationSlider;
 
         private Reputation _levelReputation;
         private bool _isInitialized = false;
+        private Tweener _filling;
 
         private void OnEnable()
         {
@@ -41,7 +43,8 @@ namespace BuilderStory
 
         public void Render()
         {
-            _reputationSlider.value = _levelReputation.Current;
+            _filling?.Kill();
+            _filling = _reputationSlider.DOValue(_levelReputation.Current, FillingDuration).SetEase(Ease.Linear);
         }
     }
 }

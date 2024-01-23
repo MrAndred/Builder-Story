@@ -1,16 +1,26 @@
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace BuilderStory
 {
     public class Structure : MonoBehaviour, IBuildable
     {
-        [SerializeField] private StructureMaterial[] _structMaterials;
+        [SerializeField] private StructureTip _tip;
+        [SerializeField] private Sprite _icon;
         [SerializeField] private float _placeDuration = 3f;
+
+        private StructureMaterial[] _structMaterials;
+        private Dictionary<MaterialType, int> _materials = new Dictionary<MaterialType, int>();
 
         private Wallet _wallet;
         private Reputation _reputation;
         private int _moneyPerMaterial = 1;
         private bool _isInitialized = false;
+
+        public IReadOnlyDictionary<MaterialType, int> MaterialsInfo => _materials;
+
+        public Sprite Icon => _icon;
 
         public bool IsBuilding { get; private set; } = false;
 
@@ -43,6 +53,8 @@ namespace BuilderStory
 
         public void Init()
         {
+            _tip?.Init();
+
             var materials = GetComponentsInChildren<BuildMaterial>();
 
             _structMaterials = new StructureMaterial[materials.Length];
@@ -55,12 +67,24 @@ namespace BuilderStory
 
             foreach (var material in _structMaterials)
             {
+                var structMaterial = material.Material;
+
+                if (_materials.ContainsKey(structMaterial.Type) == false)
+                {
+                    _materials.Add(
+                        structMaterial.Type,
+                        _structMaterials.Count(material => material.Material.Type == structMaterial.Type
+                    ));
+                }
+
                 material.Placed += OnPlaced;
             }
         }
 
         public void StartBuild(Wallet wallet, Reputation reputation)
         {
+            _tip?.gameObject.SetActive(false);
+
             _wallet = wallet;
             _reputation = reputation;
             IsBuilding = true;

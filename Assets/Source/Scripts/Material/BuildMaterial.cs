@@ -6,8 +6,8 @@ namespace BuilderStory
 {
     public class BuildMaterial : MonoBehaviour, ILiftable
     {
-        private const int _jumpCount = 1;
-        private const float _rotateDuration = 0.4f;
+        private const int JumpCount = 1;
+        private const float RotateDuration = 0.4f;
 
         [SerializeField] private MaterialType _type;
         [SerializeField] private float _jumpForce = 3f;
@@ -45,10 +45,10 @@ namespace BuilderStory
         {
             transform.SetParent(point);
 
-            Tween jump = transform.DOLocalJump(Vector3.zero, _jumpForce, _jumpCount, duration)
+            Tween jump = transform.DOLocalJump(Vector3.zero, _jumpForce, JumpCount, duration)
                 .SetEase(Ease.OutFlash);
 
-             Tween rotate = transform.DOLocalRotate(Vector3.zero, _rotateDuration, RotateMode.Fast)
+             Tween rotate = transform.DOLocalRotate(Vector3.zero, RotateDuration, RotateMode.Fast)
                 .SetEase(Ease.Linear);
 
             _pickupSequence = DOTween.Sequence();
@@ -72,10 +72,10 @@ namespace BuilderStory
             Tween scale = transform.DOScale(Vector3.zero, duration)
                 .SetEase(Ease.Linear);
 
-            Tween rotate = transform.DOLocalRotate(Vector3.zero, _rotateDuration, RotateMode.Fast)
+            Tween rotate = transform.DOLocalRotate(Vector3.zero, RotateDuration, RotateMode.Fast)
                 .SetEase(Ease.Linear);
 
-            Tween jump = transform.DOJump(point.transform.position, _jumpForce, _jumpCount, duration);
+            Tween jump = transform.DOJump(point.transform.position, _jumpForce, JumpCount, duration);
 
             _placeSequence = DOTween.Sequence();
 

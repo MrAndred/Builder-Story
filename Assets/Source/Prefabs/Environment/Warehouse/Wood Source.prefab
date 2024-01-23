@@ -233,6 +233,7 @@ GameObject:
   - component: {fileID: 6430230145101679430}
   - component: {fileID: 6063708546872490443}
   - component: {fileID: 1212289358293304050}
+  - component: {fileID: 6506080446737372507}
   m_Layer: 6
   m_Name: Wood Source
   m_TagString: Untagged
@@ -326,6 +327,7 @@ MonoBehaviour:
   _poolSize: 25
   _type: 0
   _infoHolder: {fileID: 8144296778057506380}
+  _renderer: {fileID: 6506080446737372507}
 --- !u!136 &1212289358293304050
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -349,6 +351,20 @@ CapsuleCollider:
   m_Height: 3
   m_Direction: 2
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &6506080446737372507
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1824176839899240933}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 03e5a9744b08cf54e85bed4f8feed391, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _materialIcon: {fileID: 6144382842901214174}
+  _visualizations: {fileID: 11400000, guid: f203a2b196f944941be66473d58f0e44, type: 2}
 --- !u!1 &4000112991539214630
 GameObject:
   m_ObjectHideFlags: 0
@@ -360,7 +376,6 @@ GameObject:
   - component: {fileID: 5220144616538951892}
   - component: {fileID: 2691621542977787276}
   - component: {fileID: 1702524872272419081}
-  - component: {fileID: 2938435396370271565}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -435,23 +450,6 @@ MonoBehaviour:
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 1
   m_PresetInfoIsWorld: 1
---- !u!114 &2938435396370271565
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4000112991539214630}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dc42784cf147c0c48a680349fa168899, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_IgnoreReversedGraphics: 1
-  m_BlockingObjects: 0
-  m_BlockingMask:
-    serializedVersion: 2
-    m_Bits: 4294967295
 --- !u!1 &4543234598695981554
 GameObject:
   m_ObjectHideFlags: 0

@@ -7,7 +7,7 @@ namespace BuilderStory
 {
     public class ContractInfoRenderer : MonoBehaviour
     {
-        private const float _appearDuration = 0.8f;
+        private const float AppearDuration = 0.8f;
 
         [SerializeField] private Button _infoContract;
         [SerializeField] private RectTransform _infoContractTransform;
@@ -33,13 +33,13 @@ namespace BuilderStory
         public void Show()
         {
             _infoContract.interactable = true;
-            _tweener = _infoContractTransform.DOAnchorPos(_showContractLocalPosition, _appearDuration).SetEase(Ease.OutBounce);
+            _tweener = _infoContractTransform.DOAnchorPos(_showContractLocalPosition, AppearDuration).SetEase(Ease.OutBounce);
         }
 
         public void Hide()
         {
             _infoContract.interactable = false;
-            _tweener = _infoContractTransform.DOAnchorPos(_hideContractLocalPosition, _appearDuration).SetEase(Ease.InCubic);
+            _tweener = _infoContractTransform.DOAnchorPos(_hideContractLocalPosition, AppearDuration).SetEase(Ease.InCubic);
         }
 
         private void InfoClicked()

@@ -34,6 +34,14 @@ namespace BuilderStory
             return newInstance;
         }
 
+        public void Reset()
+        {
+            foreach (var instance in _pool)
+            {
+                instance.gameObject.SetActive(false);
+            }
+        }
+
         private List<T> InitializePool()
         {
             var pool = new List<T>();

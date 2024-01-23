@@ -192,7 +192,6 @@ GameObject:
   - component: {fileID: 58852501733189938}
   - component: {fileID: 1663644503140176624}
   - component: {fileID: 8240077556295053089}
-  - component: {fileID: 1481317566433203721}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -267,23 +266,6 @@ MonoBehaviour:
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 1
   m_PresetInfoIsWorld: 1
---- !u!114 &1481317566433203721
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4138430894754202469}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dc42784cf147c0c48a680349fa168899, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_IgnoreReversedGraphics: 1
-  m_BlockingObjects: 0
-  m_BlockingMask:
-    serializedVersion: 2
-    m_Bits: 4294967295
 --- !u!1 &4259351793839857639
 GameObject:
   m_ObjectHideFlags: 0
@@ -405,6 +387,7 @@ GameObject:
   - component: {fileID: 531781597388847918}
   - component: {fileID: 7013753076217476346}
   - component: {fileID: 2391440986352633267}
+  - component: {fileID: 647595388980377756}
   m_Layer: 6
   m_Name: Stone Source
   m_TagString: Untagged
@@ -419,7 +402,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7232340649450659510}
-  m_LocalRotation: {x: 0.5000001, y: 0.4999999, z: 0.5000001, w: -0.49999994}
+  m_LocalRotation: {x: -0.5, y: -0.5, z: -0.5, w: 0.5}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -429,8 +412,8 @@ Transform:
   - {fileID: 6798158864257355537}
   - {fileID: 58852501733189938}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: -90, y: 0, z: -90}
 --- !u!33 &312674674656814778
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -498,6 +481,7 @@ MonoBehaviour:
   _poolSize: 25
   _type: 2
   _infoHolder: {fileID: 2110978837831815328}
+  _renderer: {fileID: 647595388980377756}
 --- !u!136 &2391440986352633267
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -521,6 +505,20 @@ CapsuleCollider:
   m_Height: 3
   m_Direction: 2
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &647595388980377756
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7232340649450659510}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 03e5a9744b08cf54e85bed4f8feed391, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _materialIcon: {fileID: 2203869742501979706}
+  _visualizations: {fileID: 11400000, guid: f203a2b196f944941be66473d58f0e44, type: 2}
 --- !u!1 &8519266089363687212
 GameObject:
   m_ObjectHideFlags: 0

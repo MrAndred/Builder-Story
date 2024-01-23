@@ -7,14 +7,14 @@ namespace BuilderStory
     {
         private const string Idle = "Stopped";
 
-        private readonly Worker _worker;
+        private readonly Lift _lift;
         private readonly IBuildable[] _buildables;
 
         private Animator _animator;
 
-        public WaitingBuildState(Animator animator, IBuildable[] buildables, Worker worker)
+        public WaitingBuildState(Animator animator, IBuildable[] buildables, Lift lift)
         {
-            _worker = worker;
+            _lift = lift;
             _animator = animator;
             _buildables = buildables;
         }
@@ -30,6 +30,11 @@ namespace BuilderStory
 
         public bool IsReady()
         {
+            if (_lift.IsEmpty == false)
+            {
+                return false;
+            }
+
             foreach (var buildable in _buildables)
             {
                 if ( buildable.IsBuilding == true)
@@ -39,7 +44,6 @@ namespace BuilderStory
             }
 
             return true;
-            // return _worker.IsBusy != true;
         }
 
         public void Update()

@@ -42,9 +42,6 @@ namespace BuilderStory
 
         public void Init(Wallet wallet, Reputation reputation)
         {
-#if UNITY_EDITOR
-            Application.targetFrameRate = 30;
-#endif
             _startBehaviour = new SearchState(_interactableMask, _interactDistance, transform);
 
             _wallet = wallet;
