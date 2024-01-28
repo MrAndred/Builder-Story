@@ -41,11 +41,11 @@ namespace BuilderStory
             _pickupSequence?.Kill();
         }
 
-        public void PickUp(Transform point, float duration)
+        public void PickUp(Transform point, float duration, Vector3 offset)
         {
             transform.SetParent(point);
 
-            Tween jump = transform.DOLocalJump(Vector3.zero, _jumpForce, JumpCount, duration)
+            Tween jump = transform.DOLocalJump(Vector3.zero + offset, _jumpForce, JumpCount, duration)
                 .SetEase(Ease.OutFlash);
 
              Tween rotate = transform.DOLocalRotate(Vector3.zero, RotateDuration, RotateMode.Fast)

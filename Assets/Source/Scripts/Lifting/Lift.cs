@@ -7,6 +7,8 @@ namespace BuilderStory
 {
     public class Lift : MonoBehaviour
     {
+        private readonly Vector3 offset = new Vector3(0, 1f, 0);
+
         [SerializeField] private float _liftDuration = 1f;
         [SerializeField] private float _maxCapacity = 10f;
 
@@ -33,7 +35,7 @@ namespace BuilderStory
                 return;
             }
 
-            liftable.PickUp(point, _liftDuration);
+            liftable.PickUp(point, _liftDuration, _liftables.Count * offset);
             liftable.OnPickedUp += PickedUp;
             _liftables.Add(liftable);
             IsLifting = true;

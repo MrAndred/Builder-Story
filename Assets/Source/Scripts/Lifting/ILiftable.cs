@@ -15,7 +15,7 @@ namespace BuilderStory
 
         public bool IsPlaced { get; }
 
-        public void PickUp(Transform transform, float duration);
+        public void PickUp(Transform transform, float duration, Vector3 offset);
 
         public void Place(Transform transform, float duration);
     }

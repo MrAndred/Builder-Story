@@ -443,6 +443,7 @@ PlayerSettings:
   openGLRequireES31AEP: 0
   openGLRequireES32: 0
   m_TemplateCustomTags:
+    METRICA_COUNTER_ID: 
     MOBILE_RENDER_SCALE: 3
     PRODUCT_DESCRIPTION: 
     RENDER_SCALE: 3

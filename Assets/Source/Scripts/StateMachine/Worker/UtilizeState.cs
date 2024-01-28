@@ -57,6 +57,11 @@ namespace BuilderStory
                     continue;
                 }
 
+                if (buildable.IsBuilt() == true)
+                {
+                    return true;
+                }
+
                 if (buildable.CouldPlaceMaterial(_lift.LastLiftable) == false)
                 {
                     return true;
