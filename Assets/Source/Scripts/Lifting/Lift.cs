@@ -10,7 +10,8 @@ namespace BuilderStory
         private readonly Vector3 offset = new Vector3(0, 1f, 0);
 
         [SerializeField] private float _liftDuration = 1f;
-        [SerializeField] private float _maxCapacity = 10f;
+        
+        private float _maxCapacity = 2f;
 
         private List<ILiftable> _liftables = new List<ILiftable>();
 
@@ -27,6 +28,11 @@ namespace BuilderStory
         public bool IsEmpty => _liftables.Count == 0;
 
         public bool IsLifting { get; private set; } = false;
+
+        public void Init(int capacity)
+        {
+            _maxCapacity = capacity;
+        }
 
         public void PickUp(ILiftable liftable, Transform point)
         {

@@ -29,6 +29,7 @@ namespace BuilderStory
             _wallet = wallet;
 
             _wallet.MoneyChanged += Render;
+            Render();
         }
 
         public void Render()

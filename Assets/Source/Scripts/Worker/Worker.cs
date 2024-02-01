@@ -37,7 +37,12 @@ namespace BuilderStory
             _stateMachine.Update();
         }
 
-        public void Init(Structure[] buildables, Navigator navigator)
+        private void OnDrawGizmos()
+        {
+            Gizmos.DrawSphere(transform.position, _interactDistance);
+        }
+
+        public void Init(Structure[] buildables, Navigator navigator, float speed, int capacity)
         {
             _buildables = buildables;
             _navigator = navigator;
@@ -55,6 +60,9 @@ namespace BuilderStory
             _startBehaviour = behaviours[typeof(WaitingBuildState)];
 
             _stateMachine = new StateMachine(_startBehaviour, behaviours);
+
+            _lift.Init(capacity);
+            _navMeshAgent.speed = speed;
 
             _isInitialized = true;
         }

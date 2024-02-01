@@ -30,14 +30,10 @@ namespace BuilderStory
         public event Action OnCloseClicked;
         public event Action OnBuildClicked;
 
-        private void Awake()
-        {
-            _materialsPool = new ObjectPool<MaterialItem>(_materialItem, DefaultPoolSize, _content);
-        }
-
         private void OnEnable()
         {
-            transform.localScale = Vector3.zero;
+            _rectTransform.localScale = Vector3.zero;
+
             _build.onClick.AddListener(OnBuildClick);
 
             foreach (var close in _closeButtons)
@@ -57,8 +53,15 @@ namespace BuilderStory
             _tweener?.Kill();
         }
 
+        public void Init()
+        {
+            _materialsPool = new ObjectPool<MaterialItem>(_materialItem, DefaultPoolSize, _content);
+        }
+
         public void Show(Structure structure)
         {
+            gameObject.SetActive(true);
+
             _materialsPool.Reset();
 
             _icon.sprite = structure.Icon;
@@ -77,18 +80,17 @@ namespace BuilderStory
             _scrollRect.gameObject.SetActive(true);
             _scrollRect.DOHorizontalNormalizedPos(DefaultHorizontalNormalizedPos, DefaultScrollDuration);
 
-            _background.localScale = Vector3.one;
-            _rectTransform.localScale = Vector3.zero;
+            _tweener?.Kill();
             _tweener = _rectTransform.DOScale(Vector2.one, AppearTime).SetEase(Ease.Linear);
         }
 
         public void Hide()
         {
-            _background.localScale = Vector3.zero;
-
+            _tweener?.Kill();
             _tweener = _rectTransform.DOScale(Vector2.zero, AppearTime).SetEase(Ease.Linear).OnComplete(() =>
             {
                 _scrollRect.gameObject.SetActive(false);
+                gameObject.SetActive(false);
             });
         }
 

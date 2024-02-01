@@ -1,10 +1,12 @@
-using Agava.YandexGames;
+using System.Collections;
 using UnityEngine;
 
 namespace BuilderStory
 {
     public class LevelRoot : MonoBehaviour
     {
+        private const int WorkersCount = 5;
+
         [SerializeField] private Player _player;
         [SerializeField] private CameraFollow _cameraFollow;
 
@@ -12,22 +14,31 @@ namespace BuilderStory
         [SerializeField] private Structure[] _structures;
         [SerializeField] private Trash[] _trashes;
 
-        [SerializeField] private Worker[] _workers;
+        [SerializeField] private Worker[] _workerTemplates;
+        [SerializeField] private Transform _workersParent;
+
         [SerializeField] private Navigator _navigator;
 
-        [SerializeField] private ReputationRenderer _reputationRenderer;
-        [SerializeField] private WalletRenderer _walletRenderer;
+        [SerializeField] private LevelUIRoot _levelUIRoot;
+
+        private ObjectPool<Worker> _workerPool;
 
         private Wallet _wallet;
         private Reputation _reputation;
+        private ProgressSaves _saveObject;
 
         private void Start()
         {
+            _saveObject = new ProgressSaves();
+            _saveObject.DataLoaded += OnDataLoaded;
+
             Init();
         }
 
         private void Init()
         {
+            _workerPool = new ObjectPool<Worker>(_workerTemplates, WorkersCount, _workersParent);
+
             int maxLevelReputation = 0;
 
             foreach (var structure in _structures)
@@ -36,18 +47,12 @@ namespace BuilderStory
                 maxLevelReputation += structure.MaterialsCount;
             }
 
-            int reputationValue = 0;
-            int moneyMultiplier = 1;
+            _reputation = new Reputation(_saveObject.Reputation, maxLevelReputation, _saveObject.MoneyMultiplier);
+            _wallet = new Wallet(_saveObject.Money, _reputation);
 
-            _reputation = new Reputation(reputationValue, maxLevelReputation, moneyMultiplier);
+            _levelUIRoot.Init(_reputation, _wallet, _saveObject);
 
-            int money = 0;
-            _wallet = new Wallet(money, _reputation);
-
-            _walletRenderer.Init(_wallet);
-            _reputationRenderer.Init(_reputation);
-
-            _player.Init(_wallet, _reputation);
+            _player.Init(_wallet, _reputation, _saveObject.PlayerSpeed, _saveObject.PlayerCapacity) ;
 
             _cameraFollow.Init(_player);
 
@@ -58,9 +63,11 @@ namespace BuilderStory
 
             _navigator.Init(_materialSources, _trashes);
 
-            foreach (var worker in _workers)
+            for (int i = 0; i < _saveObject.WorkersCount; i++)
             {
-                worker.Init(_structures, _navigator);
+                var worker = _workerPool.GetAvailable();
+                worker.Init(_structures, _navigator, _saveObject.WorkersSpeed, _saveObject.WorkersCapacity);
+                worker.gameObject.SetActive(true);
             }
 
 #if UNITY_EDITOR == false
@@ -68,14 +75,10 @@ namespace BuilderStory
 #endif
         }
 
-        private void OnDataLoaded(string data)
+        private void OnDataLoaded()
         {
-            Debug.Log(data);
-        }
-
-        private void OnLoadError(string error)
-        {
-            Debug.LogError(error);
+            Init();
+            _saveObject.DataLoaded -= OnDataLoaded;
         }
     }
 }

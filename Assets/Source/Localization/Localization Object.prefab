@@ -24,6 +24,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 547091660735733064}
+  serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
@@ -33,7 +34,6 @@ Transform:
   - {fileID: 4872166409739933991}
   - {fileID: 1432640674082172257}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1726317657161543979
 MonoBehaviour:
@@ -47,7 +47,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 806f0696300aeac44a0e17efee222854, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currentLanguage: Turkish
+  currentLanguage: Russian
   detectLanguage: 0
   defaultLanguage: Russian
   saveLoad: 1
@@ -58,6 +58,27 @@ MonoBehaviour:
   - Root: {fileID: 8314335199940661416, guid: 51a1aa04bede34146a9e15b56642fcea, type: 3}
     sources:
     - {fileID: 8288725743471705244, guid: 51a1aa04bede34146a9e15b56642fcea, type: 3}
+  - Root: {fileID: 6505427038694330282, guid: 6587496edb14a3f45862ff8d7d72d6ff, type: 3}
+    sources:
+    - {fileID: 3120236951492829605, guid: 6587496edb14a3f45862ff8d7d72d6ff, type: 3}
+  - Root: {fileID: 8360619995163920661, guid: 06f72c1de7b961241b74b19bc114a57c, type: 3}
+    sources:
+    - {fileID: 696736060440605504, guid: 06f72c1de7b961241b74b19bc114a57c, type: 3}
+  - Root: {fileID: 7956718029048131205, guid: 61e964739962dbc43a13b89ba31dd698, type: 3}
+    sources:
+    - {fileID: 1960117417328349570, guid: 61e964739962dbc43a13b89ba31dd698, type: 3}
+  - Root: {fileID: 1659157796986971024, guid: e1241e9773a843a49a13da4fc921785a, type: 3}
+    sources:
+    - {fileID: 1669989735710505287, guid: e1241e9773a843a49a13da4fc921785a, type: 3}
+  - Root: {fileID: 1231951982292214151, guid: 8d4ac934c4ee3b34d8971efaa42385fb, type: 3}
+    sources:
+    - {fileID: 2808774609530947937, guid: 8d4ac934c4ee3b34d8971efaa42385fb, type: 3}
+  - Root: {fileID: 2847793230022949356, guid: 919ca7b99beaae54b9aacf57b4762ece, type: 3}
+    sources:
+    - {fileID: 492369388014235318, guid: 919ca7b99beaae54b9aacf57b4762ece, type: 3}
+  - Root: {fileID: 3863367277827075475, guid: 058af15682ac6ef42afcff08e2729a5d, type: 3}
+    sources:
+    - {fileID: 9067658019206909041, guid: 058af15682ac6ef42afcff08e2729a5d, type: 3}
 --- !u!1001 &2899797273002076507
 PrefabInstance:
   m_ObjectHideFlags: 0

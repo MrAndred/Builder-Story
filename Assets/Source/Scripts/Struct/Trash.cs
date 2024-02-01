@@ -24,7 +24,7 @@ namespace BuilderStory
             return true;
         }
 
-        public bool TryPlaceMaterial(ILiftable liftable, out Transform destination)
+        public bool TryPlaceMaterial(ILiftable liftable, float placeDuration, out Transform destination)
         {
             destination = _trashPoint;
             return true;

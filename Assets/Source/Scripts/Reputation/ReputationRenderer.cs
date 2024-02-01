@@ -1,6 +1,8 @@
 using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
+using TMPro;
+using UnityEngine.SceneManagement;
 
 namespace BuilderStory
 {
@@ -9,6 +11,7 @@ namespace BuilderStory
         private const float FillingDuration = 0.5f;
 
         [SerializeField] private Slider _reputationSlider;
+        [SerializeField] private TMP_Text _levelNumber;
 
         private Reputation _levelReputation;
         private bool _isInitialized = false;
@@ -29,7 +32,7 @@ namespace BuilderStory
             _levelReputation.ReputationChanged -= Render;
         }
 
-        public void Init(Reputation levelReputation)
+        public void Init(Reputation levelReputation, int level)
         {
             _reputationSlider.value = 0;
             _reputationSlider.minValue = 0;
@@ -39,6 +42,8 @@ namespace BuilderStory
             _levelReputation.ReputationChanged += Render;
 
             _isInitialized = true;
+
+            _levelNumber.text = level.ToString();
         }
 
         public void Render()

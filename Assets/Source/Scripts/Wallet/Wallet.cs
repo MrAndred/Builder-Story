@@ -5,12 +5,13 @@ namespace BuilderStory
     public class Wallet
     {
         private int _money = 0;
-        private Reputation _reputation;
+        private float _moneyMultiplier = 1f;
+        private ProgressSaves _progressSaves;
 
-        public Wallet(int money, Reputation reputation)
+        public Wallet(ProgressSaves progressSaves)
         {
-            _money = money;
-            _reputation = reputation;
+            _money = progressSaves.Money;
+            _moneyMultiplier = progressSaves.MoneyMultiplier;
         }
 
         public event Action MoneyChanged;
@@ -24,7 +25,7 @@ namespace BuilderStory
                 return;
             }
 
-            _money += money * _reputation.MoneyMultiplier;
+            _money += UnityEngine.Mathf.RoundToInt(money * _progressSaves.MoneyMultiplier);
             MoneyChanged?.Invoke();
         }
 

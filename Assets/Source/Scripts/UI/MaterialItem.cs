@@ -16,5 +16,10 @@ namespace BuilderStory
             _icon.sprite = icon;
             _count.text = string.Format(CountFormat, count);
         }
+
+        public void ChangeCount(int count)
+        {
+            _count.text = string.Format(CountFormat, count);
+        }
     }
 }

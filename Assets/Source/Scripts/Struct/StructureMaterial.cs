@@ -7,10 +7,9 @@ namespace BuilderStory
     public class StructureMaterial
     {
         private MeshRenderer _meshRenderer;
-        private float _placeDuration;
         private Sequence _place;
 
-        public event Action Placed;
+        public event Action<ILiftable> Placed;
 
         public bool IsPlaced { get; private set; }
 
@@ -18,11 +17,10 @@ namespace BuilderStory
 
         public BuildMaterial Material { get; private set; }
 
-        public StructureMaterial(BuildMaterial material, MeshRenderer meshRenderer, float placeDuration)
+        public StructureMaterial(BuildMaterial material, MeshRenderer meshRenderer)
         {
             IsPlaced = false;
             Material = material;
-            _placeDuration = placeDuration;
             _meshRenderer = meshRenderer;
             _meshRenderer.gameObject.transform.localScale = Vector3.zero;
             _meshRenderer.enabled = false;
@@ -33,12 +31,12 @@ namespace BuilderStory
             _place?.Kill();
         }
 
-        public void Place()
+        public void Place(float placeDuration)
         {
             IsPlaced = true;
             _meshRenderer.enabled = true;
 
-            Tween scale = _meshRenderer.gameObject.transform.DOScale(Vector3.one, _placeDuration)
+            Tween scale = _meshRenderer.gameObject.transform.DOScale(Vector3.one, placeDuration)
                 .SetEase(Ease.Linear);
 
             _place = DOTween.Sequence();
@@ -49,7 +47,7 @@ namespace BuilderStory
 
             _place.OnComplete(() =>
             {
-                Placed?.Invoke();
+                Placed?.Invoke(Material);
             });
         }
     }

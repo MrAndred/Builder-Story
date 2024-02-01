@@ -40,7 +40,7 @@ namespace BuilderStory
             _playerMovement.Handle();
         }
 
-        public void Init(Wallet wallet, Reputation reputation)
+        public void Init(Wallet wallet, Reputation reputation, float speed, int capacity)
         {
             _startBehaviour = new SearchState(_interactableMask, _interactDistance, transform);
 
@@ -63,7 +63,10 @@ namespace BuilderStory
 
             _behaviours = behaviours;
             _stateMachine = new StateMachine(_startBehaviour, behaviours);
-            _playerMovement.Init();
+
+            _lift.Init(capacity);
+            _playerMovement.Init(speed);
+
             _isInitialized = true;
         }
     }

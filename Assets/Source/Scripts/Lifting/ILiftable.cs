@@ -9,6 +9,8 @@ namespace BuilderStory
 
         public event Action<ILiftable> OnPlaced;
 
+        public Vector3 Position { get; }
+
         public MaterialType Type { get; }
 
         public bool IsPickedUp { get; }

@@ -1,5 +1,4 @@
 using System;
-using System.Diagnostics;
 
 namespace BuilderStory
 {
@@ -7,7 +6,7 @@ namespace BuilderStory
     {
         private const int AddReputation = 1;
 
-        public Reputation(int current, int max, int moneyMultiplier)
+        public Reputation(int current, int max, float moneyMultiplier)
         {
             Max = max;
             Current = current;
@@ -16,7 +15,7 @@ namespace BuilderStory
 
         public event Action ReputationChanged;
         
-        public int MoneyMultiplier { get; private set; }
+        public float MoneyMultiplier { get; private set; }
 
         public int Max { get; private set; }
 

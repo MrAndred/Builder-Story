@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -8,7 +9,10 @@ namespace BuilderStory
     {
         [SerializeField] private StructureTip _tip;
         [SerializeField] private Sprite _icon;
-        [SerializeField] private float _placeDuration = 3f;
+
+        [SerializeField] private StructureCanvas _canvas;
+        [SerializeField] private ParticleSystem _buildEffect;
+        [SerializeField] private ParticleSystem _placeEffect;
 
         private StructureMaterial[] _structMaterials;
         private Dictionary<MaterialType, int> _materials = new Dictionary<MaterialType, int>();
@@ -17,6 +21,8 @@ namespace BuilderStory
         private Reputation _reputation;
         private int _moneyPerMaterial = 1;
         private bool _isInitialized = false;
+
+        public event Action Placed;
 
         public IReadOnlyDictionary<MaterialType, int> MaterialsInfo => _materials;
 
@@ -62,7 +68,7 @@ namespace BuilderStory
             for (int i = 0; i < materials.Length; i++)
             {
                 var meshRenderer = materials[i].GetComponent<MeshRenderer>();
-                _structMaterials[i] = new StructureMaterial(materials[i], meshRenderer, _placeDuration);
+                _structMaterials[i] = new StructureMaterial(materials[i], meshRenderer);
             }
 
             foreach (var material in _structMaterials)
@@ -79,10 +85,17 @@ namespace BuilderStory
 
                 material.Placed += OnPlaced;
             }
+
+            if (_canvas != null)
+            {
+                _canvas.gameObject.SetActive(false);
+                _canvas.Init();
+            }
         }
 
         public void StartBuild(Wallet wallet, Reputation reputation)
         {
+            _canvas?.gameObject.SetActive(true);
             _tip?.gameObject.SetActive(false);
 
             _wallet = wallet;
@@ -136,7 +149,7 @@ namespace BuilderStory
             return false;
         }
 
-        public bool TryPlaceMaterial(ILiftable material, out Transform destination)
+        public bool TryPlaceMaterial(ILiftable material, float placeDuration, out Transform destination)
         {
             if (IsBuilding == false)
             {
@@ -148,7 +161,7 @@ namespace BuilderStory
             {
                 if (structMaterial.IsPlaced == false && structMaterial.Material.Type == material.Type)
                 {
-                    PlaceMaterial(structMaterial);
+                    PlaceMaterial(structMaterial, placeDuration);
                     destination = structMaterial.Material.transform;
                     return true;
                 }
@@ -171,14 +184,14 @@ namespace BuilderStory
             return true;
         }
 
-        private void PlaceMaterial(StructureMaterial structMaterial)
+        private void PlaceMaterial(StructureMaterial structMaterial, float placeDuration)
         {
             if (IsBuilding == false)
             {
                 return;
             }
 
-            structMaterial.Place();
+            structMaterial.Place(placeDuration);
 
             if (IsBuilt() == true)
             {
@@ -189,12 +202,26 @@ namespace BuilderStory
         private void FinishBuild()
         {
             IsBuilding = false;
+            _canvas?.Hide();
         }
 
-        private void OnPlaced()
+        private void OnPlaced(ILiftable material)
         {
+            int materialCount = 1;
+
             _wallet.AddMoney(_moneyPerMaterial);
             _reputation.Add();
+
+            _placeEffect.transform.position = material.Position;
+            _placeEffect.Play();
+
+            _materials[material.Type] -= materialCount;
+            Placed?.Invoke();
+
+            if (IsBuilt() == true)
+            {
+                _buildEffect.Play();
+            }
         }
 
         private int GetPlacedMaterialsCount()

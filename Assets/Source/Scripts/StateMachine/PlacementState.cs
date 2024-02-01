@@ -83,7 +83,7 @@ namespace BuilderStory
 
             while (_lift.IsEmpty == false)
             {
-                if (_buildable.TryPlaceMaterial(_lift.LastLiftable, out Transform destination) == false)
+                if (_buildable.TryPlaceMaterial(_lift.LastLiftable, _lift.Duration, out Transform destination) == false)
                 {
                     break;
                 }

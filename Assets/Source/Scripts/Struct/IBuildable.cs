@@ -12,7 +12,7 @@ namespace BuilderStory
 
         public Transform GetMaterialPoint(ILiftable material);
 
-        public bool TryPlaceMaterial(ILiftable liftable, out Transform destination);
+        public bool TryPlaceMaterial(ILiftable liftable, float plcaDuration, out Transform destination);
 
         public bool IsBuilt();
     }

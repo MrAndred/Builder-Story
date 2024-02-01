@@ -10,14 +10,18 @@ namespace BuilderStory
         [SerializeField] private Animator _animator;
         [SerializeField] private Joystick _joystick;
         [SerializeField] private Rigidbody _rigidbody;
-        [SerializeField] private float _speed;
+
         [SerializeField] private float _rotationSpeed;
+
+        private float _speed;
 
         private Vector3 _originVector;
         private bool _isInitialized;
 
-        public void Init()
+        public void Init(float speed)
         {
+            _speed = speed;
+
             _originVector = transform.position;
 
             _isInitialized = true;

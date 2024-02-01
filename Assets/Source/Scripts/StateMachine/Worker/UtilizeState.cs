@@ -33,7 +33,7 @@ namespace BuilderStory
 
         public bool IsReady()
         {
-            if (_navMeshAgent.hasPath == true)
+            if (_navMeshAgent.remainingDistance > _interactDistance)
             {
                 return false;
             }

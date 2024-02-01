@@ -1,9 +1,12 @@
+using UnityEngine;
 using UnityEngine.AI;
 
 namespace BuilderStory
 {
     public class SearchDestinationState : IBehaviour
     {
+        private const float MaxDistance = 50f;
+
         private Navigator _navigator;
         private IBuildable[] _structures;
         private NavMeshAgent _agent;
@@ -37,7 +40,13 @@ namespace BuilderStory
                 }
             }
 
-            _agent.SetDestination(destinationPoint);
+            NavMeshHit closestHit;
+
+            if (NavMesh.SamplePosition(destinationPoint, out closestHit, MaxDistance, NavMesh.AllAreas))
+            {
+                Vector3 finalPosition = closestHit.position;
+                _agent.SetDestination(finalPosition);
+            }
         }
 
 
