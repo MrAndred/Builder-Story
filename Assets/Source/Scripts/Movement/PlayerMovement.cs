@@ -6,7 +6,6 @@ namespace BuilderStory
     public class PlayerMovement : MonoBehaviour
     {
         private const float PositionY = 0f;
-        private const float Magnitude = 0.1f;
         private const float MinSpeed = 0f;
         private const string Speed = "Speed";
         private const string Vertical = "Vertical";
@@ -20,14 +19,11 @@ namespace BuilderStory
 
         private float _speed;
 
-        private Vector3 _originVector;
         private bool _isInitialized;
 
         public void Init(float speed)
         {
             _speed = speed;
-
-            _originVector = transform.position;
 
             _isInitialized = true;
         }
@@ -67,7 +63,7 @@ namespace BuilderStory
             var horizontal = Input.GetAxis(Horizontal);
             var vertical = Input.GetAxis(Vertical);
 
-            var keyboardDirection = new Vector3(horizontal, PositionY, vertical);
+            var keyboardDirection = new Vector3(horizontal, PositionY, vertical).normalized;
 
             return joystickDirection != Vector3.zero ? joystickDirection : keyboardDirection;
         }
