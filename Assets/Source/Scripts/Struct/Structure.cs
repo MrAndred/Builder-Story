@@ -56,7 +56,6 @@ namespace BuilderStory
             }
         }
 
-
         public void Init()
         {
             _tip?.Init();

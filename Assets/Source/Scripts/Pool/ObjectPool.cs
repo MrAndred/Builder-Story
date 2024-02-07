@@ -11,8 +11,6 @@ namespace BuilderStory
 
         private List<T> _pool;
 
-        public IReadOnlyCollection<T> Pool => _pool;
-
         public ObjectPool(T prefab, int poolSize, Transform parent)
         {
             _prefab = prefab;
@@ -20,6 +18,10 @@ namespace BuilderStory
             _parent = parent;
             _pool = InitializePool();
         }
+
+        public int Count => _pool.Count;
+
+        public int ActiveCount => _pool.FindAll(x => x.gameObject.activeSelf).Count;
 
         public ObjectPool(T[] prefabs, int poolSize, Transform parent)
         {

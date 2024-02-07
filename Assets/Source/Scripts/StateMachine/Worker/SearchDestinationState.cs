@@ -27,7 +27,7 @@ namespace BuilderStory
             var structure = GetBuilding();
             var destinationPoint = _navigator.GetRandomTrashPoint().position;
 
-            if (_lift.IsFull && structure.CouldPlaceMaterial(_lift.LastLiftable))
+            if (_lift.IsFull && structure.CouldPlaceMaterial(_lift.LastLiftable) == true)
             {
                 destinationPoint = structure.GetMaterialPoint(_lift.LastLiftable).position;
             }

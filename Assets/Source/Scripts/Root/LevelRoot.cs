@@ -1,4 +1,3 @@
-using System.Collections;
 using UnityEngine;
 
 namespace BuilderStory
@@ -32,7 +31,7 @@ namespace BuilderStory
             _saveObject = new ProgressSaves();
             _saveObject.DataLoaded += OnDataLoaded;
 
-            Init();
+            _saveObject.LoadData();
         }
 
         private void Init()
@@ -47,12 +46,12 @@ namespace BuilderStory
                 maxLevelReputation += structure.MaterialsCount;
             }
 
-            _reputation = new Reputation(_saveObject.Reputation, maxLevelReputation, _saveObject.MoneyMultiplier);
-            _wallet = new Wallet(_saveObject.Money, _reputation);
+            _reputation = new Reputation(_saveObject, maxLevelReputation);
+            _wallet = new Wallet(_saveObject);
 
             _levelUIRoot.Init(_reputation, _wallet, _saveObject);
 
-            _player.Init(_wallet, _reputation, _saveObject.PlayerSpeed, _saveObject.PlayerCapacity) ;
+            _player.Init(_wallet, _reputation, _saveObject);
 
             _cameraFollow.Init(_player);
 
@@ -66,13 +65,25 @@ namespace BuilderStory
             for (int i = 0; i < _saveObject.WorkersCount; i++)
             {
                 var worker = _workerPool.GetAvailable();
-                worker.Init(_structures, _navigator, _saveObject.WorkersSpeed, _saveObject.WorkersCapacity);
                 worker.gameObject.SetActive(true);
+                worker.Init(_structures, _navigator, _saveObject);
             }
+
+            _saveObject.WorkersCountChanged += OnWorkersCountChanged;
 
 #if UNITY_EDITOR == false
             Agava.YandexGames.YandexGamesSdk.GameReady();
 #endif
+        }
+
+        private void OnWorkersCountChanged(int count)
+        {
+            for (int i = 0; i < count - _workerPool.ActiveCount; i++)
+            {
+                var worker = _workerPool.GetAvailable();
+                worker.Init(_structures, _navigator, _saveObject);
+                worker.gameObject.SetActive(true);
+            }
         }
 
         private void OnDataLoaded()

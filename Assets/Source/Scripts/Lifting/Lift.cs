@@ -60,6 +60,11 @@ namespace BuilderStory
             IsLifting = true;
         }
 
+        public void ChangeCapacity(int capacity)
+        {
+            _maxCapacity = capacity;
+        }
+
         private void PickedUp(ILiftable liftable)
         {
             liftable.OnPickedUp -= PickedUp;

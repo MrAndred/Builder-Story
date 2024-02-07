@@ -6,7 +6,7 @@ using UnityEngine.AI;
 namespace BuilderStory
 {
     [RequireComponent(typeof(Lift))]
-    public class Worker : MonoBehaviour, IWorkable
+    public class Worker : MonoBehaviour
     {
         [SerializeField] private Animator _animator;
         [SerializeField] private NavMeshAgent _navMeshAgent;
@@ -19,33 +19,48 @@ namespace BuilderStory
 
         private Navigator _navigator;
 
-        private IBuildable[] _buildables;
+        private Structure[] _buildables;
         private IBehaviour _startBehaviour;
 
         private StateMachine _stateMachine;
-        private bool _isInitialized;
+        private ProgressSaves _progressSaves;
 
-        public bool IsBusy { get; private set; }
 
-        private void Update()
+        private void OnEnable()
         {
-            if (!_isInitialized)
+            if (_progressSaves == null)
             {
                 return;
             }
 
-            _stateMachine.Update();
+            _progressSaves.WorkersSpeedChanged += ChangeSpeed;
+            _progressSaves.WorkersCapacityChanged += _lift.ChangeCapacity;
         }
 
-        private void OnDrawGizmos()
+        private void OnDisable()
         {
-            Gizmos.DrawSphere(transform.position, _interactDistance);
+            if (_progressSaves == null)
+            {
+                return;
+            }
+
+            _progressSaves.WorkersSpeedChanged -= ChangeSpeed;
+            _progressSaves.WorkersCapacityChanged -= _lift.ChangeCapacity;
         }
 
-        public void Init(Structure[] buildables, Navigator navigator, float speed, int capacity)
+        private void Update()
         {
+            _stateMachine?.Update();
+        }
+
+        public void Init(Structure[] buildables, Navigator navigator, ProgressSaves progressSaves)
+        {
+            _progressSaves = progressSaves;
             _buildables = buildables;
             _navigator = navigator;
+
+            _lift.Init(progressSaves.WorkersCapacity);
+            _navMeshAgent.speed = progressSaves.WorkersSpeed;
 
             var behaviours = new Dictionary<Type, IBehaviour>
             {
@@ -53,7 +68,14 @@ namespace BuilderStory
                 {typeof(MovingState), new MovingState(_animator, _navMeshAgent, _interactDistance )},
                 {typeof(PickupState), new PickupState(_animator, _lift, _pickupPoint, _interactDistance, _layerMask )},
                 {typeof(PlacementState), new PlacementState(_animator, _lift, _interactDistance, _layerMask)},
-                {typeof(UtilizeState), new UtilizeState(_navigator, _lift, _navMeshAgent, _interactDistance, _layerMask)},
+                {typeof(UtilizeState),
+                    new UtilizeState(
+                        _navigator,
+                        _lift,
+                        _navMeshAgent,
+                        _buildables,
+                        _interactDistance,
+                        _layerMask)},
                 {typeof(SearchDestinationState), new SearchDestinationState(_navigator, _buildables, _navMeshAgent, _lift) },
             };
 
@@ -61,10 +83,13 @@ namespace BuilderStory
 
             _stateMachine = new StateMachine(_startBehaviour, behaviours);
 
-            _lift.Init(capacity);
-            _navMeshAgent.speed = speed;
+            _progressSaves.WorkersSpeedChanged += ChangeSpeed;
+            _progressSaves.WorkersCapacityChanged += _lift.ChangeCapacity;
+        }
 
-            _isInitialized = true;
+        private void ChangeSpeed(float speed)
+        {
+            _navMeshAgent.speed = speed;
         }
     }
 }

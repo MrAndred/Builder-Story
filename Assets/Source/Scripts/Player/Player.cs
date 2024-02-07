@@ -16,36 +16,47 @@ namespace BuilderStory
         [SerializeField] private PlayerMovement _playerMovement;
         [SerializeField] private Lift _lift;
 
-        private Wallet _wallet;
-        private Reputation _reputation;
+        private ProgressSaves _progressSaves;
         private StateMachine _stateMachine;
 
-        private Dictionary<Type, IBehaviour> _behaviours;
         private IBehaviour _startBehaviour;
 
-        private bool _isInitialized;
-
-        private void Update()
+        private void OnEnable()
         {
-            if (!_isInitialized)
+            if (_progressSaves == null)
             {
                 return;
             }
 
-            _stateMachine.Update();
+            _progressSaves.PlayerSpeedChanged += _playerMovement.ChangeSpeed;
+            _progressSaves.PlayerCapacityChanged += _lift.ChangeCapacity;
+        }
+
+        private void OnDisable()
+        {
+            if (_progressSaves == null)
+            {
+                return;
+            }
+
+            _progressSaves.PlayerSpeedChanged -= _playerMovement.ChangeSpeed;
+            _progressSaves.PlayerCapacityChanged -= _lift.ChangeCapacity;
+        }
+
+        private void Update()
+        {
+            _stateMachine?.Update();
         }
 
         private void FixedUpdate()
         {
-            _playerMovement.Handle();
+            _playerMovement?.Handle();
         }
 
-        public void Init(Wallet wallet, Reputation reputation, float speed, int capacity)
+        public void Init(Wallet wallet, Reputation reputation, ProgressSaves progressSaves)
         {
+            _progressSaves = progressSaves;
             _startBehaviour = new SearchState(_interactableMask, _interactDistance, transform);
-
-            _wallet = wallet;
-            _reputation = reputation;
 
             var behaviours = new Dictionary<Type, IBehaviour>
             {
@@ -54,20 +65,20 @@ namespace BuilderStory
                 {typeof(PlacementState), new PlacementState(_animator , _lift, _interactDistance, _interactableMask)},
                 {typeof(PickContractState), new PickContractState(
                     wallet,
-                    _reputation,
-                    _playerRenderer, 
-                    _interactableMask, 
-                    transform, 
+                    reputation,
+                    _playerRenderer,
+                    _interactableMask,
+                    transform,
                     _interactDistance)},
             };
 
-            _behaviours = behaviours;
             _stateMachine = new StateMachine(_startBehaviour, behaviours);
 
-            _lift.Init(capacity);
-            _playerMovement.Init(speed);
+            _lift.Init(_progressSaves.PlayerCapacity);
+            _playerMovement.Init(_progressSaves.PlayerSpeed);
 
-            _isInitialized = true;
+            _progressSaves.PlayerSpeedChanged += _playerMovement.ChangeSpeed;
+            _progressSaves.PlayerCapacityChanged += _lift.ChangeCapacity;
         }
     }
 }

@@ -21,5 +21,10 @@ namespace BuilderStory
         {
             _count.text = string.Format(CountFormat, count);
         }
+
+        public void Hide()
+        {
+            gameObject.SetActive(false);
+        }
     }
 }

@@ -1763,7 +1763,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _liftDuration: 0.35
-  _maxCapacity: 1
 --- !u!114 &7952119387087529554
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1827,7 +1826,6 @@ MonoBehaviour:
   _animator: {fileID: 3353157586396646661}
   _joystick: {fileID: 0}
   _rigidbody: {fileID: 6552552796502027927}
-  _speed: 5
   _rotationSpeed: 720
 --- !u!1 &7860810395958367216
 GameObject:

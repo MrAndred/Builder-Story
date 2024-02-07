@@ -5,7 +5,12 @@ namespace BuilderStory
     [RequireComponent(typeof(Rigidbody))]
     public class PlayerMovement : MonoBehaviour
     {
+        private const float PositionY = 0f;
+        private const float Magnitude = 0.1f;
+        private const float MinSpeed = 0f;
         private const string Speed = "Speed";
+        private const string Vertical = "Vertical";
+        private const string Horizontal = "Horizontal";
 
         [SerializeField] private Animator _animator;
         [SerializeField] private Joystick _joystick;
@@ -34,18 +39,37 @@ namespace BuilderStory
                 return;
             }
 
-            var direction = new Vector3(_joystick.Horizontal, _originVector.y, _joystick.Vertical);
+            var direction = GetDirection();
 
-            if (direction.magnitude > 0)
+            if (direction != Vector3.zero)
             {
                 _animator.SetFloat(Speed, direction.magnitude);
-                
+
                 Move(direction);
                 Rotate(direction);
-            } else
-            {
-                _animator.SetFloat(Speed, 0);
             }
+            else
+            {
+                _animator.SetFloat(Speed, MinSpeed);
+            }
+        }
+
+        public void ChangeSpeed(float speed)
+        {
+            _speed = speed;
+        }
+
+        private Vector3 GetDirection()
+        {
+            var joystickDirection = new Vector3(_joystick.Horizontal, PositionY, _joystick.Vertical);
+
+
+            var horizontal = Input.GetAxis(Horizontal);
+            var vertical = Input.GetAxis(Vertical);
+
+            var keyboardDirection = new Vector3(horizontal, PositionY, vertical);
+
+            return joystickDirection != Vector3.zero ? joystickDirection : keyboardDirection;
         }
 
         private void Move(Vector3 direction)

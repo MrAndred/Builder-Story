@@ -6,29 +6,29 @@ namespace BuilderStory
     {
         private const int AddReputation = 1;
 
-        public Reputation(int current, int max, float moneyMultiplier)
+        private ProgressSaves _progressSaves;
+
+        public Reputation(ProgressSaves progressSaves, int max)
         {
+            _progressSaves = progressSaves;
+
             Max = max;
-            Current = current;
-            MoneyMultiplier = moneyMultiplier;
         }
 
         public event Action ReputationChanged;
         
-        public float MoneyMultiplier { get; private set; }
-
         public int Max { get; private set; }
 
-        public int Current { get; private set; }
+        public int Current => _progressSaves.Reputation;
 
         public void Add()
         {
-            if (Current + AddReputation > Max)
+            if (_progressSaves.Reputation + AddReputation > Max)
             {
                 return;
             }
 
-            Current += AddReputation;
+            _progressSaves.AddReputation(AddReputation);
             ReputationChanged?.Invoke();
         }
     }

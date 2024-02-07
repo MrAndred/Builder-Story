@@ -8,7 +8,6 @@ namespace BuilderStory
         [SerializeField] private TMP_Text _money;
 
         private Wallet _wallet;
-        private bool _isInitialized;
 
         private void OnEnable()
         {

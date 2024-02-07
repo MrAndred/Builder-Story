@@ -4,46 +4,38 @@ namespace BuilderStory
 {
     public class Wallet
     {
-        private int _money = 0;
-        private float _moneyMultiplier = 1f;
         private ProgressSaves _progressSaves;
 
         public Wallet(ProgressSaves progressSaves)
         {
-            _money = progressSaves.Money;
-            _moneyMultiplier = progressSaves.MoneyMultiplier;
+            _progressSaves = progressSaves;
         }
 
         public event Action MoneyChanged;
 
-        public int Money => _money;
+        public int Money => _progressSaves.Money;
 
         public void AddMoney(int money)
         {
-            if (money < 0)
-            {
-                return;
-            }
-
-            _money += UnityEngine.Mathf.RoundToInt(money * _progressSaves.MoneyMultiplier);
+            _progressSaves.AddMoney(money);
             MoneyChanged?.Invoke();
         }
 
-        public bool TrySpendMoney(int money)
+        public bool SpendMoney(int money)
         {
-            if (IsEnoughMoney(money) == false)
-            {
-                return false;
-            }
-
-            _money -= money;
+            _progressSaves.SpendMoney(money);
             MoneyChanged?.Invoke();
             return true;
         }
 
-        private bool IsEnoughMoney(int money)
+        public bool IsEnoughMoney(int money)
         {
-            return _money >= money;
+            if (money < 0)
+            {
+                return false;
+            }
+
+            return _progressSaves.Money >= money;
         }
     }
 }
