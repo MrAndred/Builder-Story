@@ -10,6 +10,7 @@ namespace BuilderStory
         [SerializeField] private StructureTip _tip;
         [SerializeField] private Sprite _icon;
 
+        [SerializeField] private SpriteRenderer _areaTip;
         [SerializeField] private StructureCanvas _canvas;
         [SerializeField] private ParticleSystem _buildEffect;
         [SerializeField] private ParticleSystem _placeEffect;
@@ -201,6 +202,7 @@ namespace BuilderStory
         private void FinishBuild()
         {
             IsBuilding = false;
+            _areaTip.gameObject.SetActive(false);
             _canvas?.Hide();
         }
 

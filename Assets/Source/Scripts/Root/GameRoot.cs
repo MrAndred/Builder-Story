@@ -14,7 +14,7 @@ namespace BuilderStory
         private const float _loadingSpeed = 1.0f;
         private const float _progressThreshold = 0.85f;
 
-        private string _lastLevelName = "Test Level 1";
+        private string _lastLevelName = "Level 1";
 
         [SerializeField] private Slider _loader;
         [SerializeField] private Lean.Localization.LeanLocalization _localization;

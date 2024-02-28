@@ -5,6 +5,7 @@ namespace BuilderStory
     [RequireComponent(typeof(Rigidbody))]
     public class PlayerMovement : MonoBehaviour
     {
+        private const float _checkDistance = 1f;
         private const float PositionY = 0f;
         private const float MinSpeed = 0f;
         private const string Speed = "Speed";
@@ -14,11 +15,11 @@ namespace BuilderStory
         [SerializeField] private Animator _animator;
         [SerializeField] private Joystick _joystick;
         [SerializeField] private Rigidbody _rigidbody;
+        [SerializeField] private Transform _groundCheck;
 
         [SerializeField] private float _rotationSpeed;
 
         private float _speed;
-
         private bool _isInitialized;
 
         public void Init(float speed)
@@ -45,6 +46,11 @@ namespace BuilderStory
                 Rotate(direction);
             }
             else
+            {
+                _animator.SetFloat(Speed, MinSpeed);
+            }
+
+            if (Physics.Linecast(_groundCheck.position, _groundCheck.position + Vector3.down * _checkDistance) == false)
             {
                 _animator.SetFloat(Speed, MinSpeed);
             }

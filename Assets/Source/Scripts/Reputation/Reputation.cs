@@ -16,7 +16,8 @@ namespace BuilderStory
         }
 
         public event Action ReputationChanged;
-        
+        public event Action ReachedMaxReputation;
+
         public int Max { get; private set; }
 
         public int Current => _progressSaves.Reputation;
@@ -30,6 +31,11 @@ namespace BuilderStory
 
             _progressSaves.AddReputation(AddReputation);
             ReputationChanged?.Invoke();
+
+            if (_progressSaves.Reputation >= Max)
+            {
+                ReachedMaxReputation?.Invoke();
+            }
         }
     }
 }

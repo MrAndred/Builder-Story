@@ -13,7 +13,7 @@ namespace BuilderStory
         [SerializeField] private Structure[] _structures;
         [SerializeField] private Trash[] _trashes;
 
-        [SerializeField] private Worker[] _workerTemplates;
+        [SerializeField] private WorkerSkinPerLevel _workerTemplates;
         [SerializeField] private Transform _workersParent;
 
         [SerializeField] private Navigator _navigator;
@@ -36,7 +36,9 @@ namespace BuilderStory
 
         private void Init()
         {
-            _workerPool = new ObjectPool<Worker>(_workerTemplates, WorkersCount, _workersParent);
+            int level = BuilderStoryUtil.GetLevelNumber();
+
+            _workerPool = new ObjectPool<Worker>(_workerTemplates.GetSkin(level), WorkersCount, _workersParent);
 
             int maxLevelReputation = 0;
 

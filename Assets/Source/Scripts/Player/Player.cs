@@ -20,6 +20,7 @@ namespace BuilderStory
         private StateMachine _stateMachine;
 
         private IBehaviour _startBehaviour;
+        private Vector3 _originPosition;
 
         private void OnEnable()
         {
@@ -55,6 +56,7 @@ namespace BuilderStory
 
         public void Init(Wallet wallet, Reputation reputation, ProgressSaves progressSaves)
         {
+            _originPosition = transform.position;
             _progressSaves = progressSaves;
             _startBehaviour = new SearchState(_interactableMask, _interactDistance, transform);
 
@@ -79,6 +81,11 @@ namespace BuilderStory
 
             _progressSaves.PlayerSpeedChanged += _playerMovement.ChangeSpeed;
             _progressSaves.PlayerCapacityChanged += _lift.ChangeCapacity;
+        }
+
+        public void Respawn()
+        {
+            transform.position = _originPosition;
         }
     }
 }

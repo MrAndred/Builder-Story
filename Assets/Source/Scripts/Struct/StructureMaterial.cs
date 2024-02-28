@@ -21,7 +21,11 @@ namespace BuilderStory
         {
             IsPlaced = false;
             Material = material;
+
             _meshRenderer = meshRenderer;
+            var mesh = _meshRenderer.gameObject.GetComponent<MeshFilter>().mesh;
+            mesh.Optimize();
+
             _meshRenderer.gameObject.transform.localScale = Vector3.zero;
             _meshRenderer.enabled = false;
         }
