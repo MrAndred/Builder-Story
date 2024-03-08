@@ -1,5 +1,4 @@
 using Agava.YandexGames;
-using System;
 using System.Collections;
 using TMPro;
 using UnityEngine;
@@ -14,11 +13,13 @@ namespace BuilderStory
         private const float _loadingSpeed = 1.0f;
         private const float _progressThreshold = 0.85f;
 
-        private string _lastLevelName = "Level 1";
-
         [SerializeField] private Slider _loader;
         [SerializeField] private Lean.Localization.LeanLocalization _localization;
         [SerializeField] private TMP_Text _percentText;
+
+        private ProgressSaves _saveObject;
+        private bool _dataReceived = false;
+        private bool _dataProcessed = false;
 
         private IEnumerator Start()
         {
@@ -29,22 +30,44 @@ namespace BuilderStory
             Lean.Localization.LeanLocalization.SetCurrentLanguageAll(
                 LocalizationUtil.Languages[YandexGamesSdk.Environment.i18n.lang]);
 #endif
-            yield return StartCoroutine(LoadSceneWithProgressBar(_lastLevelName));
+            _saveObject = new ProgressSaves();
+            _saveObject.DataLoaded += OnLevelLoaded;
+
+            _saveObject.LoadData(this);
+
+            yield return StartCoroutine(GetDataAndLoadScene());
         }
 
-        private IEnumerator LoadSceneWithProgressBar(string sceneName)
+        private IEnumerator GetDataAndLoadScene()
         {
-            AsyncOperation asyncOperation = SceneManager.LoadSceneAsync(sceneName);
+            yield return new WaitUntil(() => _dataReceived == true);
+
+            yield return StartCoroutine(LoadSceneWithProgressBar(_saveObject.Level));
+        }
+
+        private void OnLevelLoaded()
+        {
+            _dataReceived = true;
+            _saveObject.DataLoaded -= OnLevelLoaded;
+        }
+
+        private IEnumerator LoadSceneWithProgressBar(int sceneIndex)
+        {
+            float progressMax = 1f;
+            int percentMultipplier = 100;
+            int progressMin = 0;
+
+            AsyncOperation asyncOperation = SceneManager.LoadSceneAsync(sceneIndex);
             asyncOperation.allowSceneActivation = false;
 
-            _loader.value = 0;
+            _loader.value = progressMin;
 
             while (!asyncOperation.isDone)
             {
-                float progress = asyncOperation.progress < _progressThreshold ? asyncOperation.progress : 1f;
+                float progress = asyncOperation.progress < _progressThreshold ? asyncOperation.progress : progressMax;
                 _loader.value = Mathf.Lerp(_loader.value, progress, _loadingSpeed * Time.deltaTime);
 
-                string percent = string.Format(_percentTemplate, (int)(_loader.value * 100));
+                string percent = string.Format(_percentTemplate, (int)(_loader.value * percentMultipplier));
                 _percentText.text = percent;
 
                 if (_loader.value >= _progressThreshold)

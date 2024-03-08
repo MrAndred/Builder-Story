@@ -25,6 +25,7 @@ namespace BuilderStory
         private StateMachine _stateMachine;
         private ProgressSaves _progressSaves;
 
+        public IReadOnlyLift Lift => _lift;
 
         private void OnEnable()
         {

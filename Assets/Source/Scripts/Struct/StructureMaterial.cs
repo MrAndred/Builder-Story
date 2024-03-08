@@ -8,16 +8,16 @@ namespace BuilderStory
     {
         private MeshRenderer _meshRenderer;
         private Sequence _place;
+        private Material _default;
+        private Material _highlighted;
+        private bool _isHighlighted;
 
-        public event Action<ILiftable> Placed;
-
-        public bool IsPlaced { get; private set; }
-
-        public Transform Point => Material.Point;
-
-        public BuildMaterial Material { get; private set; }
-
-        public StructureMaterial(BuildMaterial material, MeshRenderer meshRenderer)
+        public StructureMaterial(
+            BuildMaterial material, 
+            MeshRenderer meshRenderer,
+            Material defaultMaterial,
+            Material highlighted
+            )
         {
             IsPlaced = false;
             Material = material;
@@ -26,33 +26,49 @@ namespace BuilderStory
             var mesh = _meshRenderer.gameObject.GetComponent<MeshFilter>().mesh;
             mesh.Optimize();
 
-            _meshRenderer.gameObject.transform.localScale = Vector3.zero;
+            _meshRenderer.material = highlighted;
             _meshRenderer.enabled = false;
+            _default = defaultMaterial;
+            _highlighted = highlighted;
+            _isHighlighted = false;
         }
+
+        public event Action<ILiftable> Placed;
+
+        public bool IsPlaced { get; private set; }
+
+        public BuildMaterial Material { get; private set; }
+
+        public bool Highlighted => _isHighlighted;
 
         public void Disable()
         {
             _place?.Kill();
         }
 
-        public void Place(float placeDuration)
+        public void Place()
         {
             IsPlaced = true;
+
+            _isHighlighted = false;
+
             _meshRenderer.enabled = true;
+            _meshRenderer.material = _default;
 
-            Tween scale = _meshRenderer.gameObject.transform.DOScale(Vector3.one, placeDuration)
-                .SetEase(Ease.Linear);
+            Placed?.Invoke(Material);
+        }
 
-            _place = DOTween.Sequence();
+        public void Highlight()
+        {
+            _meshRenderer.material = _highlighted;
+            _meshRenderer.enabled = true;
+            _isHighlighted = true;
+        }
 
-            _place.Append(scale);
-
-            _place.Play();
-
-            _place.OnComplete(() =>
-            {
-                Placed?.Invoke(Material);
-            });
+        public void RemoveHighlight()
+        {
+            _meshRenderer.enabled = false;
+            _isHighlighted = false;
         }
     }
 }

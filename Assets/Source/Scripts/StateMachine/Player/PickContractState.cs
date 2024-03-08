@@ -37,8 +37,18 @@ namespace BuilderStory
 
         public void Exit()
         {
-            _renderer.Hide();
             _renderer.OnContractAccepted -= ContractAccepted;
+
+            var colliders = Physics.OverlapSphere(_raycastPoint.position, _interactDistance, _interactLayer);
+
+            if (colliders.Length == 0)
+            {
+                _renderer.HideAll();
+                return;
+            }
+
+            _renderer.HideContract();
+
         }
 
         public bool IsReady()

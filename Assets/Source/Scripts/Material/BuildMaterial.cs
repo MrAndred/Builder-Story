@@ -7,9 +7,9 @@ namespace BuilderStory
     public class BuildMaterial : MonoBehaviour, ILiftable
     {
         private const int JumpCount = 1;
+        private const float _jumpForce = 3f;
 
         [SerializeField] private MaterialType _type;
-        [SerializeField] private float _jumpForce = 3f;
 
         private Sequence _pickupSequence;
         private Sequence _placeSequence;

@@ -32,9 +32,15 @@ namespace BuilderStory
             _structure = structure;
         }
 
-        public void Hide()
+        public void HideContract()
         {
             _contractInfoRenderer.Hide();
+        }
+
+        public void HideAll()
+        {
+            _contractInfoRenderer.Hide();
+            _contractRenderer.Hide();
         }
 
         private void InfoClicked()

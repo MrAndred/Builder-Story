@@ -5,8 +5,11 @@ using UnityEngine;
 
 namespace BuilderStory
 {
-    public class Lift : MonoBehaviour
+    public class Lift : MonoBehaviour, IReadOnlyLift
     {
+        private const string PickUpAudioKey = "PickUp";
+        private const string PlaceAudioKey = "Place";
+
         private readonly Vector3 offset = new Vector3(0, 1f, 0);
 
         [SerializeField] private float _liftDuration = 1f;
@@ -19,7 +22,15 @@ namespace BuilderStory
 
         public event Action Unloaded;
 
+        public event Action<ILiftable> OnPickedUp;
+
+        public event Action<ILiftable, Transform> OnDropped;
+
         public ILiftable LastLiftable => _liftables.LastOrDefault();
+
+        public ILiftable[] Liftables => _liftables.ToArray();
+
+        public int Length => _liftables.Count;
 
         public float Duration => _liftDuration;
 
@@ -41,8 +52,13 @@ namespace BuilderStory
                 return;
             }
 
+            AudioManager.Instance.PlaySFX(AudioMap.Instance.GetAudioClip(PickUpAudioKey));
+
             liftable.PickUp(point, _liftDuration, _liftables.Count * offset);
             liftable.OnPickedUp += PickedUp;
+
+            OnPickedUp?.Invoke(liftable);
+
             _liftables.Add(liftable);
             IsLifting = true;
         }
@@ -54,8 +70,13 @@ namespace BuilderStory
                 return;
             }
 
+            AudioManager.Instance.PlaySFX(AudioMap.Instance.GetAudioClip(PlaceAudioKey));
+
             liftable.Place(point, _liftDuration);
             liftable.OnPlaced += Placed;
+
+            OnDropped?.Invoke(liftable, point);
+
             _liftables.Remove(liftable);
             IsLifting = true;
         }

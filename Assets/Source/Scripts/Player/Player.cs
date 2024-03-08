@@ -22,6 +22,8 @@ namespace BuilderStory
         private IBehaviour _startBehaviour;
         private Vector3 _originPosition;
 
+        public IReadOnlyLift Lift => _lift;
+
         private void OnEnable()
         {
             if (_progressSaves == null)

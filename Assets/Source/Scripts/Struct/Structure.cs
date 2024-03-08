@@ -7,20 +7,26 @@ namespace BuilderStory
 {
     public class Structure : MonoBehaviour, IBuildable
     {
+        private const string Fireworks = "Fireworks";
+        private const int MoneyPerMaterial = 1;
+
+        [Header("Structure UI")]
+        [SerializeField] private StructureCanvas _canvas;
         [SerializeField] private StructureTip _tip;
         [SerializeField] private Sprite _icon;
 
+        [Header("Effects")]
         [SerializeField] private SpriteRenderer _areaTip;
-        [SerializeField] private StructureCanvas _canvas;
         [SerializeField] private ParticleSystem _buildEffect;
         [SerializeField] private ParticleSystem _placeEffect;
+        [SerializeField] private Transform _buildedStructure;
+
 
         private StructureMaterial[] _structMaterials;
         private Dictionary<MaterialType, int> _materials = new Dictionary<MaterialType, int>();
 
         private Wallet _wallet;
         private Reputation _reputation;
-        private int _moneyPerMaterial = 1;
         private bool _isInitialized = false;
 
         public event Action Placed;
@@ -57,7 +63,7 @@ namespace BuilderStory
             }
         }
 
-        public void Init()
+        public void Init(BuildMaterialMap buildMaterialMap, Material highlight)
         {
             _tip?.Init();
 
@@ -68,7 +74,12 @@ namespace BuilderStory
             for (int i = 0; i < materials.Length; i++)
             {
                 var meshRenderer = materials[i].GetComponent<MeshRenderer>();
-                _structMaterials[i] = new StructureMaterial(materials[i], meshRenderer);
+                var buildMaterial = materials[i];
+                _structMaterials[i] = new StructureMaterial(
+                    buildMaterial, 
+                    meshRenderer, 
+                    buildMaterialMap.GetMaterial(buildMaterial.Type),
+                    highlight);
             }
 
             foreach (var material in _structMaterials)
@@ -161,7 +172,7 @@ namespace BuilderStory
             {
                 if (structMaterial.IsPlaced == false && structMaterial.Material.Type == material.Type)
                 {
-                    PlaceMaterial(structMaterial, placeDuration);
+                    PlaceMaterial(structMaterial);
                     destination = structMaterial.Material.transform;
                     return true;
                 }
@@ -184,14 +195,65 @@ namespace BuilderStory
             return true;
         }
 
-        private void PlaceMaterial(StructureMaterial structMaterial, float placeDuration)
+        public void RemoveHighlight()
+        {
+            foreach (var material in _structMaterials)
+            {
+                if (material.Highlighted == true)
+                {
+                    material.RemoveHighlight();
+                }
+            }
+        }
+
+        public void TryHighlight(ILiftable material)
+        {
+            if (IsBuilding == false || IsBuilt() == true)
+            {
+                return;
+            }
+
+            foreach (var structMaterial in _structMaterials)
+            {
+                if (
+                    structMaterial.IsPlaced == false && 
+                    structMaterial.Material.Type == material.Type &&
+                    structMaterial.Highlighted == false
+                    )
+                {
+                    structMaterial.Highlight();
+                    return;
+                }
+            }
+        }
+
+        public void TryUnhighlight(ILiftable material)
+        {
+            if (IsBuilding == false || IsBuilt() == true)
+            {
+                return;
+            }
+
+            for (int i = _structMaterials.Length - 1; i >= 0; i--)
+            {
+                var structMaterial = _structMaterials[i];
+
+                if (structMaterial.Highlighted == true && structMaterial.Material.Type == material.Type)
+                {
+                    structMaterial.RemoveHighlight();
+                    return;
+                }
+            }
+        }
+
+        private void PlaceMaterial(StructureMaterial structMaterial)
         {
             if (IsBuilding == false)
             {
                 return;
             }
 
-            structMaterial.Place(placeDuration);
+            structMaterial.Place();
 
             if (IsBuilt() == true)
             {
@@ -204,13 +266,16 @@ namespace BuilderStory
             IsBuilding = false;
             _areaTip.gameObject.SetActive(false);
             _canvas?.Hide();
+            _buildedStructure.gameObject.SetActive(true);
+            AudioManager.Instance.PlaySFX(AudioMap.Instance.GetAudioClip(Fireworks));
+            gameObject.SetActive(false);
         }
 
         private void OnPlaced(ILiftable material)
         {
             int materialCount = 1;
 
-            _wallet.AddMoney(_moneyPerMaterial);
+            _wallet.AddMoney(MoneyPerMaterial);
             _reputation.Add();
 
             _placeEffect.transform.position = material.Position;
