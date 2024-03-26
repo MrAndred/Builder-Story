@@ -32,11 +32,11 @@ namespace BuilderStory
             _levelReputation.ReputationChanged -= Render;
         }
 
-        public void Init(Reputation levelReputation, int level)
+        public void Init(Reputation levelReputation, float minLevel, int level)
         {
-            _reputationSlider.value = 0;
-            _reputationSlider.minValue = 0;
-            _reputationSlider.maxValue = levelReputation.Max;
+            _reputationSlider.value = minLevel;
+            _reputationSlider.minValue = minLevel;
+            _reputationSlider.maxValue = levelReputation.Max + minLevel;
             _levelReputation = levelReputation;
 
             _levelReputation.ReputationChanged += Render;

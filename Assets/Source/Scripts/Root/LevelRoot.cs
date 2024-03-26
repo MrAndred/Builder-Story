@@ -54,12 +54,10 @@ namespace BuilderStory
 
         private void Init()
         {
-            _audioMap.Init();
             _audioManager.Init();
 
             _audioManager.PlayMusic(_audioMap.GetAudioClip(MainThemeOST));
 
-            _buildMaterialMap.Init();
             _wallet = new Wallet(_saveObject);
 
             int level = BuilderStoryUtil.GetLevelNumber();
@@ -67,9 +65,9 @@ namespace BuilderStory
             _structuresRoot.Init(_buildMaterialMap, _highlight);
             _structures = _structuresRoot.Structures;
 
-            int maxLevelReputation = _structuresRoot.GetStructureMaterialsCount();
+            int materialsCount = _structuresRoot.GetStructureMaterialsCount();
 
-            _reputation = new Reputation(_saveObject, maxLevelReputation);
+            _reputation = new Reputation(_saveObject, materialsCount);
 
             _levelUIRoot.Init(_reputation, _wallet, _saveObject);
 

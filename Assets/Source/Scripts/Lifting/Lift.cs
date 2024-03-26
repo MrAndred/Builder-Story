@@ -36,7 +36,7 @@ namespace BuilderStory
 
         public bool IsFull => _liftables.Count >= _maxCapacity;
 
-        public bool IsEmpty => _liftables.Count == 0;
+        public bool IsEmpty => _liftables.Count <= 0;
 
         public bool IsLifting { get; private set; } = false;
 

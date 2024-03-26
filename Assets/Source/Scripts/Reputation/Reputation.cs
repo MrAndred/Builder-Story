@@ -12,13 +12,16 @@ namespace BuilderStory
         {
             _progressSaves = progressSaves;
 
-            Max = max;
+            Min = _progressSaves.Reputation;
+            Max = Min + max;
         }
 
         public event Action ReputationChanged;
         public event Action ReachedMaxReputation;
 
         public int Max { get; private set; }
+
+        public int Min { get; private set; }
 
         public int Current => _progressSaves.Reputation;
 
