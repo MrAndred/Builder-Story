@@ -9,13 +9,15 @@ namespace BuilderStory
 
         public event Action<ILiftable> OnPlaced;
 
+        public Vector3 Position { get; }
+
         public MaterialType Type { get; }
 
         public bool IsPickedUp { get; }
 
         public bool IsPlaced { get; }
 
-        public void PickUp(Transform transform, float duration);
+        public void PickUp(Transform transform, float duration, Vector3 offset);
 
         public void Place(Transform transform, float duration);
     }

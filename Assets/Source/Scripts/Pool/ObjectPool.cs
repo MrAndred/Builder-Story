@@ -19,13 +19,23 @@ namespace BuilderStory
             _pool = InitializePool();
         }
 
+        public int Count => _pool.Count;
+
+        public int ActiveCount => _pool.FindAll(x => x.gameObject.activeSelf).Count;
+
+        public ObjectPool(T[] prefabs, int poolSize, Transform parent)
+        {
+            _poolSize = poolSize;
+            _parent = parent;
+            _pool = InitializePool(prefabs);
+        }
+
         public T GetAvailable()
         {
             foreach (var instance in _pool)
             {
                 if (!instance.gameObject.activeSelf)
                 {
-                    instance.gameObject.SetActive(true);
                     return instance;
                 }
             }
@@ -35,6 +45,14 @@ namespace BuilderStory
             return newInstance;
         }
 
+        public void Reset()
+        {
+            foreach (var instance in _pool)
+            {
+                instance.gameObject.SetActive(false);
+            }
+        }
+
         private List<T> InitializePool()
         {
             var pool = new List<T>();
@@ -42,6 +60,22 @@ namespace BuilderStory
             for (int i = 0; i < _poolSize; i++)
             {
                 var instance = GameObject.Instantiate(_prefab, _parent);
+                pool.Add(instance);
+                instance.gameObject.SetActive(false);
+            }
+
+            return pool;
+        }
+
+        private List<T> InitializePool(T[] prefabs)
+        {
+            var pool = new List<T>();
+
+            for (int i = 0; i < _poolSize; i++)
+            {
+                int preabIndex = Random.Range(0, prefabs.Length);
+
+                var instance = GameObject.Instantiate(prefabs[preabIndex], _parent);
                 pool.Add(instance);
                 instance.gameObject.SetActive(false);
             }

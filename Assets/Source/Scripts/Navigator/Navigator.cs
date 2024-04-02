@@ -4,11 +4,13 @@ namespace BuilderStory
 {
     public class Navigator : MonoBehaviour
     {
+        private Trash[] _trashes;
         private MaterialWarehouse[] _materialSources;
 
-        public void Init(MaterialWarehouse[] materialSources)
+        public void Init(MaterialWarehouse[] materialSources, Trash[] trashes)
         {
             _materialSources = materialSources;
+            _trashes = trashes;
         }
 
         public bool TryGetMaterialPosition(BuildMaterial material, out Transform position)
@@ -24,6 +26,11 @@ namespace BuilderStory
 
             position = null;
             return false;
+        }
+
+        public Transform GetRandomTrashPoint()
+        {
+            return _trashes[Random.Range(0, _trashes.Length)].transform;
         }
     }
 }

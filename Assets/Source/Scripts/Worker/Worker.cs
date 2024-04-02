@@ -1,126 +1,96 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 namespace BuilderStory
 {
-    [RequireComponent(typeof(Movement), typeof(Lift))]
-    public class Worker : MonoBehaviour, IWorkable
+    [RequireComponent(typeof(Lift))]
+    public class Worker : MonoBehaviour
     {
+        [SerializeField] private Animator _animator;
+        [SerializeField] private NavMeshAgent _navMeshAgent;
         [SerializeField] private LayerMask _layerMask;
         [SerializeField] private float _interactDistance;
 
         [SerializeField] private Transform _pickupPoint;
 
-        [SerializeField] private Movement _movement;
         [SerializeField] private Lift _lift;
 
-        private Dictionary<Type, IBehaviour> _behaviours;
+        private Navigator _navigator;
+
+        private Structure[] _buildables;
         private IBehaviour _startBehaviour;
 
         private StateMachine _stateMachine;
-        private bool _isInitialized;
+        private ProgressSaves _progressSaves;
 
-        public bool IsBusy { get; private set; }
+        public IReadOnlyLift Lift => _lift;
 
         private void OnEnable()
         {
-            _lift.PickedUp += OnLiftPickedUp;
-            _lift.Placed += OnLiftPlaced;
-        }
-
-        private void OnDisable()
-        {
-            _lift.PickedUp -= OnLiftPickedUp;
-            _lift.Placed -= OnLiftPlaced;
-        }
-
-        private void Update()
-        {
-            if (!_isInitialized)
+            if (_progressSaves == null)
             {
                 return;
             }
 
-            _stateMachine.Update();
+            _progressSaves.WorkersSpeedChanged += ChangeSpeed;
+            _progressSaves.WorkersCapacityChanged += _lift.ChangeCapacity;
         }
 
-        public void Init()
+        private void OnDisable()
         {
+            if (_progressSaves == null)
+            {
+                return;
+            }
+
+            _progressSaves.WorkersSpeedChanged -= ChangeSpeed;
+            _progressSaves.WorkersCapacityChanged -= _lift.ChangeCapacity;
+        }
+
+        private void Update()
+        {
+            _stateMachine?.Update();
+        }
+
+        public void Init(Structure[] buildables, Navigator navigator, ProgressSaves progressSaves)
+        {
+            _progressSaves = progressSaves;
+            _buildables = buildables;
+            _navigator = navigator;
+
+            _lift.Init(progressSaves.WorkersCapacity);
+            _navMeshAgent.speed = progressSaves.WorkersSpeed;
+
             var behaviours = new Dictionary<Type, IBehaviour>
             {
-                {typeof(IdleState), new IdleState(this)},
-                {typeof(MovingState), new MovingState(_movement, _interactDistance, _layerMask)},
-                {typeof(PickupState), new PickupState(_lift, _pickupPoint, _interactDistance, _layerMask )},
-                {typeof(PlacementState), new PlacementState( _lift, _interactDistance, _layerMask)}
+                {typeof(WaitingBuildState), new WaitingBuildState(_animator, buildables, _lift)},
+                {typeof(MovingState), new MovingState(_animator, _navMeshAgent, _interactDistance )},
+                {typeof(PickupState), new PickupState(_animator, _lift, _pickupPoint, _interactDistance, _layerMask )},
+                {typeof(PlacementState), new PlacementState(_animator, _lift, _interactDistance, _layerMask)},
+                {typeof(UtilizeState),
+                    new UtilizeState(
+                        _navigator,
+                        _lift,
+                        _navMeshAgent,
+                        _buildables,
+                        _interactDistance,
+                        _layerMask)},
+                {typeof(SearchDestinationState), new SearchDestinationState(_navigator, _buildables, _navMeshAgent, _lift) },
             };
 
-            _startBehaviour = behaviours[typeof(IdleState)];
-            _behaviours = behaviours;
+            _startBehaviour = behaviours[typeof(WaitingBuildState)];
 
-            _stateMachine = new StateMachine(_startBehaviour);
+            _stateMachine = new StateMachine(_startBehaviour, behaviours);
 
-            _isInitialized = true;
+            _progressSaves.WorkersSpeedChanged += ChangeSpeed;
+            _progressSaves.WorkersCapacityChanged += _lift.ChangeCapacity;
         }
 
-        public void InstallMaterial(Transform buildPosition, Transform materialPosition)
+        private void ChangeSpeed(float speed)
         {
-            _lift.Destination = buildPosition;
-
-            IsBusy = true;
-
-            _movement.SetTargetPosition(materialPosition.position);
-            IBehaviour behaviour = _behaviours[typeof(MovingState)];
-
-            if (behaviour.IsReady() == true)
-            {
-                _stateMachine.ChangeState(behaviour);
-                _movement.TargetReached += OnTargetReached;
-            }
-        }
-
-        private void OnTargetReached()
-        {
-            _movement.TargetReached -= OnTargetReached;
-
-            IBehaviour[] transitionBehaviours = new IBehaviour[]
-            {
-                _behaviours[typeof(PickupState)],
-                _behaviours[typeof(PlacementState)]
-            };
-
-            foreach (IBehaviour behaviour in transitionBehaviours)
-            {
-                if (behaviour.IsReady() == true)
-                {
-                    _stateMachine.ChangeState(behaviour);
-                    break;
-                }
-            }
-        }
-
-        private void OnLiftPickedUp()
-        {
-            if (_lift.IsFull == true)
-            {
-                _movement.SetTargetPosition(_lift.Destination.position);
-                IBehaviour behaviour = _behaviours[typeof(MovingState)];
-
-                if (behaviour.IsReady() == true)
-                {
-                    _stateMachine.ChangeState(behaviour);
-                    _movement.TargetReached += OnTargetReached;
-                }
-            }
-        }
-
-        private void OnLiftPlaced()
-        {
-            if (_lift.IsEmpty == true)
-            {
-                _stateMachine.ChangeState(_startBehaviour);
-                IsBusy = false;
-            }
+            _navMeshAgent.speed = speed;
         }
     }
 }

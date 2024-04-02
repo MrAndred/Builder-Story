@@ -4,115 +4,90 @@ using UnityEngine;
 
 namespace BuilderStory
 {
-    [RequireComponent(typeof(CapsuleCollider), typeof(Movement), typeof(Lift))]
-    public class Player : MonoBehaviour, IWorkable
+    [RequireComponent(typeof(CapsuleCollider), typeof(PlayerMovement), typeof(Lift))]
+    public class Player : MonoBehaviour
     {
+        [SerializeField] private Animator _animator;
         [SerializeField] private Transform _pickupPoint;
         [SerializeField] private float _interactDistance;
         [SerializeField] private LayerMask _interactableMask;
+        [SerializeField] private PlayerRenderer _playerRenderer;
 
-        [SerializeField] private Joystick _joystick;
-        [SerializeField] private Movement _movement;
+        [SerializeField] private PlayerMovement _playerMovement;
         [SerializeField] private Lift _lift;
 
+        private ProgressSaves _progressSaves;
         private StateMachine _stateMachine;
 
-        private Dictionary<Type, IBehaviour> _behaviours;
         private IBehaviour _startBehaviour;
+        private Vector3 _originPosition;
 
-        private bool _isInitialized;
+        public IReadOnlyLift Lift => _lift;
 
-        public bool IsBusy { get; private set; }
-
-        private void OnDisable()
+        private void OnEnable()
         {
-            _lift.PickedUp -= OnLiftPickedUp;
-            _lift.Placed -= OnLiftPlaced;
-        }
-
-        private void Start()
-        {
-            Init();
-            _lift.PickedUp += OnLiftPickedUp;
-            _lift.Placed += OnLiftPlaced;
-        }
-
-        private void Update()
-        {
-            if (!_isInitialized)
+            if (_progressSaves == null)
             {
                 return;
             }
 
-            _stateMachine.Update();
-
-            var direction = new Vector3(_joystick.Horizontal, 0, _joystick.Vertical);
-            var target = transform.position + direction;
-
-            if (target != transform.position)
-            {
-                _movement.TargetReached -= OnTargetReached;
-                _movement.MoveTo(target);
-                _movement.TargetReached += OnTargetReached;
-            }
+            _progressSaves.PlayerSpeedChanged += _playerMovement.ChangeSpeed;
+            _progressSaves.PlayerCapacityChanged += _lift.ChangeCapacity;
         }
 
-        public void Init()
+        private void OnDisable()
         {
-            _startBehaviour = new IdleState(this);
+            if (_progressSaves == null)
+            {
+                return;
+            }
+
+            _progressSaves.PlayerSpeedChanged -= _playerMovement.ChangeSpeed;
+            _progressSaves.PlayerCapacityChanged -= _lift.ChangeCapacity;
+        }
+
+        private void Update()
+        {
+            _stateMachine?.Update();
+        }
+
+        private void FixedUpdate()
+        {
+            _playerMovement?.Handle();
+        }
+
+        public void Init(Wallet wallet, Reputation reputation, ProgressSaves progressSaves)
+        {
+            _originPosition = transform.position;
+            _progressSaves = progressSaves;
+            _startBehaviour = new SearchState(_interactableMask, _interactDistance, transform);
 
             var behaviours = new Dictionary<Type, IBehaviour>
             {
-                {typeof(IdleState), _startBehaviour},
-                {typeof(PickupState), new PickupState(_lift, _pickupPoint, _interactDistance, _interactableMask)},
-                {typeof(PlacementState), new PlacementState(_lift, _interactDistance, _interactableMask)},
+                {typeof(SearchState), _startBehaviour},
+                {typeof(PickupState), new PickupState(_animator, _lift, _pickupPoint, _interactDistance, _interactableMask)},
+                {typeof(PlacementState), new PlacementState(_animator , _lift, _interactDistance, _interactableMask)},
+                {typeof(PickContractState), new PickContractState(
+                    wallet,
+                    reputation,
+                    _playerRenderer,
+                    _interactableMask,
+                    transform,
+                    _interactDistance)},
             };
 
-            _behaviours = behaviours;
-            _stateMachine = new StateMachine(_startBehaviour);
-            _isInitialized = true;
+            _stateMachine = new StateMachine(_startBehaviour, behaviours);
+
+            _lift.Init(_progressSaves.PlayerCapacity);
+            _playerMovement.Init(_progressSaves.PlayerSpeed);
+
+            _progressSaves.PlayerSpeedChanged += _playerMovement.ChangeSpeed;
+            _progressSaves.PlayerCapacityChanged += _lift.ChangeCapacity;
         }
 
-        private void OnTargetReached()
+        public void Respawn()
         {
-            _movement.TargetReached -= OnTargetReached;
-
-            IBehaviour[] transitionBehaviours = new IBehaviour[]
-            {
-                _behaviours[typeof(PickupState)],
-                _behaviours[typeof(PlacementState)]
-            };
-
-            foreach (IBehaviour behaviour in transitionBehaviours)
-            {
-                if (behaviour.IsReady() == true)
-                {
-                    _stateMachine.ChangeState(behaviour);
-                    break;
-                }
-            }
-        }
-
-        private void OnLiftPickedUp()
-        {
-            if (_lift.IsFull == true)
-            {
-                IBehaviour behaviour = _behaviours[typeof(MovingState)];
-
-                if (behaviour.IsReady() == true)
-                {
-                    _stateMachine.ChangeState(behaviour);
-                    _movement.TargetReached += OnTargetReached;
-                }
-            }
-        }
-        private void OnLiftPlaced()
-        {
-            if (_lift.IsEmpty == true)
-            {
-                _stateMachine.ChangeState(_startBehaviour);
-                IsBusy = false;
-            }
+            transform.position = _originPosition;
         }
     }
 }
