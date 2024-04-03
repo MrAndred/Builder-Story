@@ -1809,7 +1809,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _animator: {fileID: 3353157586396646661}
   _pickupPoint: {fileID: 918037359198613926}
-  _interactDistance: 0.5
+  _interactDistance: 0.8
   _interactableMask:
     serializedVersion: 2
     m_Bits: 192

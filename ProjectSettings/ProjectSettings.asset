@@ -544,7 +544,7 @@ PlayerSettings:
     METRICA_COUNTER_ID: 
     MOBILE_RENDER_SCALE: 3
     PRODUCT_DESCRIPTION: 
-    RENDER_SCALE: 3
+    RENDER_SCALE: 2,5
   mobileMTRendering:
     Android: 1
     iPhone: 1
