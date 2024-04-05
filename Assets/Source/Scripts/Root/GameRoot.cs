@@ -42,7 +42,7 @@ namespace BuilderStory
         {
             yield return new WaitUntil(() => _dataReceived == true);
 
-            yield return StartCoroutine(LoadSceneWithProgressBar(_saveObject.Level));
+            yield return StartCoroutine(LoadSceneWithProgressBar(BuilderStoryUtil.CalculateLevelIndex(_saveObject.Level)));
         }
 
         private void OnLevelLoaded()
