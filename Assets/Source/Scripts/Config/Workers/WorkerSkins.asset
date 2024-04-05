@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dcc2d902cf9ddd049aa4886db515429f, type: 3}
+  m_Name: WorkerSkins
+  m_EditorClassIdentifier: 
+  _workerTemplates:
+  - {fileID: 7464904267708758087, guid: d4082392f1da92144ac043faaf44860c, type: 3}
+  - {fileID: 7464904267708758087, guid: 9f5079b5861f26e4dac6b65f9f0ba214, type: 3}
+  - {fileID: 3787284176754191631, guid: 657039d34e299244eabd9e4ea2cc6416, type: 3}
+  - {fileID: 4778279030989136443, guid: d5facdc5ad173874baf6345ab42cf2fd, type: 3}
+  - {fileID: 2643107477815810599, guid: c8a0207a4a39c0b4c95c998904e5f160, type: 3}
