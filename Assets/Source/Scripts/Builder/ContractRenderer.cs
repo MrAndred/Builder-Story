@@ -1,9 +1,13 @@
-using DG.Tweening;
 using System;
+using BuilderStory.BuildingMaterial;
+using BuilderStory.Pool;
+using BuilderStory.Struct;
+using BuilderStory.UI;
+using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace BuilderStory
+namespace BuilderStory.Builder
 {
     public class ContractRenderer : MonoBehaviour
     {
@@ -27,8 +31,9 @@ namespace BuilderStory
 
         private Tweener _tweener;
 
-        public event Action OnCloseClicked;
-        public event Action OnBuildClicked;
+        public event Action ClickedClose;
+
+        public event Action ClickedBuild;
 
         private void OnEnable()
         {
@@ -87,21 +92,24 @@ namespace BuilderStory
         public void Hide()
         {
             _tweener?.Kill();
-            _tweener = _rectTransform.DOScale(Vector2.zero, AppearTime).SetEase(Ease.Linear).OnComplete(() =>
-            {
-                _scrollRect.gameObject.SetActive(false);
-                gameObject.SetActive(false);
-            });
+            _tweener = _rectTransform
+                .DOScale(Vector2.zero, AppearTime)
+                .SetEase(Ease.Linear)
+                .OnComplete(() =>
+                    {
+                        _scrollRect.gameObject.SetActive(false);
+                        gameObject.SetActive(false);
+                    });
         }
 
         private void OnCloseClick()
         {
-            OnCloseClicked?.Invoke();
+            ClickedClose?.Invoke();
         }
 
         private void OnBuildClick()
         {
-            OnBuildClicked?.Invoke();
+            ClickedBuild?.Invoke();
         }
     }
 }

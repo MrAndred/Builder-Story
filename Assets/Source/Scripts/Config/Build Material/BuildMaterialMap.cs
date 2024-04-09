@@ -1,7 +1,8 @@
 using System.Collections.Generic;
+using BuilderStory.BuildingMaterial;
 using UnityEngine;
 
-namespace BuilderStory
+namespace BuilderStory.Config.BuildMaterial
 {
     [CreateAssetMenu(fileName = "BuildMaterialMap", menuName = "BuilderStory/BuildMaterialMap", order = 0)]
     public class BuildMaterialMap : ScriptableObject
@@ -21,6 +22,11 @@ namespace BuilderStory
             _buildMaterialMap.Clear();
         }
 
+        public Material GetMaterial(MaterialType type)
+        {
+            return _buildMaterialMap[type].BuildMaterial;
+        }
+
         private void Init()
         {
             foreach (var buildMaterialMapStructure in _buildMaterialMapStructures)
@@ -33,11 +39,6 @@ namespace BuilderStory
 
                 _buildMaterialMap.Add(buildMaterialMapStructure.Type, buildMaterialMapStructure);
             }
-        }
-
-        public Material GetMaterial(MaterialType type)
-        {
-            return _buildMaterialMap[type].BuildMaterial;
         }
     }
 }

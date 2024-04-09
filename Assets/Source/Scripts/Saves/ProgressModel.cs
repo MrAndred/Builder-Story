@@ -1,10 +1,10 @@
-namespace BuilderStory
+namespace BuilderStory.Saves
 {
     public class ProgressModel
     {
 #if UNITY_EDITOR
         private const int DefaultMoney = 100000;
-#else 
+#else
         private const int DefaultMoney = 0;
 #endif
 
@@ -71,11 +71,6 @@ namespace BuilderStory
             Level++;
         }
 
-        private bool IsEnoughMoney(int money)
-        {
-            return Money >= money;
-        }
-
         public void SetMoneyMultiplier(float multiplier)
         {
             MoneyMultiplier = multiplier;
@@ -84,6 +79,11 @@ namespace BuilderStory
         public void ResetMoneyMultiplier()
         {
             MoneyMultiplier = DefaultMoneyMultiplier;
+        }
+
+        private bool IsEnoughMoney(int money)
+        {
+            return Money >= money;
         }
     }
 }

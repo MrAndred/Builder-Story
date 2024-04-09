@@ -1,8 +1,10 @@
-using DG.Tweening;
 using System;
+using BuilderStory.BuildingMaterial;
+using BuilderStory.Pool;
+using DG.Tweening;
 using UnityEngine;
 
-namespace BuilderStory
+namespace BuilderStory.Warehouse
 {
     public class MaterialWarehouse : MonoBehaviour
     {
@@ -17,6 +19,7 @@ namespace BuilderStory
 
         private ObjectPool<BuildMaterial> _materialPool;
         private Tweener _floating;
+        private Vector2 _offset = new Vector2(0f, 10f);
 
         public BuildMaterial Material => _materialPool.GetAvailable();
 
@@ -50,8 +53,6 @@ namespace BuilderStory
             {
                 return;
             }
-
-            Vector2 _offset = new Vector2(0f, 10f);
 
             Vector2 targetAnchor = _infoHolder.anchoredPosition + _offset;
 

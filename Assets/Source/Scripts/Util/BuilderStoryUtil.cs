@@ -1,6 +1,6 @@
 using UnityEngine.SceneManagement;
 
-namespace BuilderStory
+namespace BuilderStory.Util
 {
     public static class BuilderStoryUtil
     {
@@ -20,7 +20,7 @@ namespace BuilderStory
 
             if (levelNumber >= sceneCount)
             {
-                return levelNumber % SceneManager.sceneCountInBuildSettings + UnplayableScenesCount;
+                return (levelNumber % SceneManager.sceneCountInBuildSettings) + UnplayableScenesCount;
             }
 
             return levelNumber;

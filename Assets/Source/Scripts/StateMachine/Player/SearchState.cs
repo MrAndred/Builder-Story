@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace BuilderStory
+namespace BuilderStory.States.Player
 {
     public class SearchState : IBehaviour
     {
@@ -17,17 +17,18 @@ namespace BuilderStory
 
         public void Enter()
         {
-
         }
 
         public void Exit()
         {
-
         }
 
         public bool IsReady()
         {
-            var colliders = Physics.OverlapSphere(_searchPoint.transform.position, _searchDistance, _interactablesMask);
+            var colliders = Physics.OverlapSphere(
+                _searchPoint.transform.position,
+                _searchDistance,
+                _interactablesMask);
 
             if (colliders.Length == 0)
             {
@@ -39,7 +40,6 @@ namespace BuilderStory
 
         public void Update()
         {
-
         }
     }
 }

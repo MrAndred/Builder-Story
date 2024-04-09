@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace BuilderStory
+namespace BuilderStory.BuildingMaterial
 {
     [System.Serializable]
     public class BuildMaterialMapStructure

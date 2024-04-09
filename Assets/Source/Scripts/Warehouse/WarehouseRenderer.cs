@@ -1,7 +1,8 @@
+using BuilderStory.BuildingMaterial;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace BuilderStory
+namespace BuilderStory.Warehouse
 {
     public class WarehouseRenderer : MonoBehaviour
     {

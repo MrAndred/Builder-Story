@@ -1,4 +1,6 @@
-namespace BuilderStory
+using BuilderStory.Config.Player;
+
+namespace BuilderStory.Saves.Player
 {
     public class PlayerModel
     {
@@ -30,9 +32,11 @@ namespace BuilderStory
 
         public float Speed => _playerUpgradeMap.GetSpeed(_speedLevel);
 
-        public int SpeedUpgradeCost => _playerUpgradeCostMap.GetSpeedUpgradeCost(_speedLevel);
+        public int SpeedUpgradeCost =>
+            _playerUpgradeCostMap.GetSpeedUpgradeCost(_speedLevel);
 
-        public int CapacityUpgradeCost => _playerUpgradeCostMap.GetCapacityUpgradeCost(_capacityLevel);
+        public int CapacityUpgradeCost =>
+            _playerUpgradeCostMap.GetCapacityUpgradeCost(_capacityLevel);
 
         public void UpgradeSpeed()
         {

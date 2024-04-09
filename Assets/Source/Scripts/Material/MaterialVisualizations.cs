@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace BuilderStory
+namespace BuilderStory.BuildingMaterial
 {
     [CreateAssetMenu(fileName = "MaterialVisualizations", menuName = "BuilderStory/MaterialVisualizations")]
     public class MaterialVisualizations : ScriptableObject
@@ -18,6 +18,6 @@ namespace BuilderStory
             }
 
             return null;
-        } 
+        }
     }
 }

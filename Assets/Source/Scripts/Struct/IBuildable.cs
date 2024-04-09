@@ -1,6 +1,8 @@
+using BuilderStory.BuildingMaterial;
+using BuilderStory.Lifting;
 using UnityEngine;
 
-namespace BuilderStory
+namespace BuilderStory.Struct
 {
     public interface IBuildable
     {

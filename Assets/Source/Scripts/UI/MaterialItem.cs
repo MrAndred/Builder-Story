@@ -1,8 +1,8 @@
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using TMPro;
 
-namespace BuilderStory
+namespace BuilderStory.UI
 {
     public class MaterialItem : MonoBehaviour
     {

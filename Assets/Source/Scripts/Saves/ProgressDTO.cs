@@ -1,6 +1,6 @@
 using System;
 
-namespace BuilderStory
+namespace BuilderStory.Saves
 {
     [Serializable]
     public class ProgressDTO

@@ -1,8 +1,9 @@
 using System.Collections;
+using BuilderStory.Pause;
 using TMPro;
 using UnityEngine;
 
-namespace BuilderStory
+namespace BuilderStory.Advertisement
 {
     public class InterstitialTip : MonoBehaviour
     {
@@ -13,17 +14,23 @@ namespace BuilderStory
         [SerializeField] private TMP_Text _text;
 
         private Coroutine _coroutine;
+        private PauseSystem _pauseSystem;
+
+        public void Init(PauseSystem pauseSystem)
+        {
+            _pauseSystem = pauseSystem;
+        }
 
         public void ShowPopup()
         {
             gameObject.SetActive(true);
-            PauseSystem.Instance.AdPauseGame();
+            _pauseSystem.AdPauseGame();
             _coroutine = StartCoroutine(InitPopupInterstitialAd());
         }
 
         public void Show()
         {
-            PauseSystem.Instance.AdPauseGame();
+            _pauseSystem.AdPauseGame();
 #if UNITY_EDITOR == true
             ResumeGame();
             return;
@@ -36,7 +43,6 @@ namespace BuilderStory
             );
 #endif
         }
-
 
         private IEnumerator InitPopupInterstitialAd()
         {
@@ -68,7 +74,7 @@ namespace BuilderStory
 
         private void ResumeGame()
         {
-            PauseSystem.Instance.AdResumeGame();
+            _pauseSystem.AdResumeGame();
             gameObject.SetActive(false);
 
             if (_coroutine != null)
@@ -79,7 +85,7 @@ namespace BuilderStory
 
         private void OnInterstitalAdOpened()
         {
-            PauseSystem.Instance.AdPauseGame();
+            _pauseSystem.AdPauseGame();
         }
 
         private void OnInterstitalAdClosed(bool closed)

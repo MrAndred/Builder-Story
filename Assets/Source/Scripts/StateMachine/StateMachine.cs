@@ -1,14 +1,14 @@
 using System;
 using System.Collections.Generic;
 
-namespace BuilderStory
+namespace BuilderStory.States
 {
     public class StateMachine
     {
         private IBehaviour _currentBehaviour;
         private Dictionary<Type, IBehaviour> _behaviours;
 
-        public StateMachine( IBehaviour startBehaviour, Dictionary<Type, IBehaviour> behaviours)
+        public StateMachine(IBehaviour startBehaviour, Dictionary<Type, IBehaviour> behaviours)
         {
             Reset();
 
@@ -16,8 +16,6 @@ namespace BuilderStory
             _currentBehaviour.Enter();
             _behaviours = behaviours;
         }
-
-        public IBehaviour CurrentState => _currentBehaviour;
 
         public void Update()
         {

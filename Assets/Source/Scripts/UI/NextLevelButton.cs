@@ -1,10 +1,13 @@
-using UnityEngine;
-using DG.Tweening;
-using UnityEngine.UI;
-using UnityEngine.SceneManagement;
 using System.Collections;
+using BuilderStory.Pause;
+using BuilderStory.Saves;
+using BuilderStory.Util;
+using DG.Tweening;
+using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
-namespace BuilderStory
+namespace BuilderStory.UI
 {
     public class NextLevelButton : MonoBehaviour
     {
@@ -17,7 +20,7 @@ namespace BuilderStory
         [SerializeField] private float _endXPosition;
 
         private ProgressSaves _progressSaves;
-        private AdCanvas _adCanvas;
+        private PauseSystem _pauseSystem;
 
         private void OnEnable()
         {
@@ -29,10 +32,9 @@ namespace BuilderStory
             _button.onClick.RemoveListener(Clicked);
         }
 
-        public void Init(ProgressSaves progressSaves, AdCanvas adCanvas)
+        public void Init(ProgressSaves progressSaves, PauseSystem pauseSystem)
         {
             _progressSaves = progressSaves;
-            _adCanvas = adCanvas;
         }
 
         public void Show()
@@ -48,7 +50,9 @@ namespace BuilderStory
         public void Hide()
         {
             gameObject.SetActive(false);
-            _container.DOAnchorPosX(_startXPosition, Duration).OnComplete(() => gameObject.SetActive(false));
+            _container
+                .DOAnchorPosX(_startXPosition, Duration)
+                .OnComplete(() => gameObject.SetActive(false));
         }
 
         private void Clicked()
@@ -69,7 +73,8 @@ namespace BuilderStory
             if (canOpen)
             {
                 Agava.YandexGames.ReviewPopup.Open();
-            } else
+            }
+            else
             {
                 Debug.LogWarning("Review popup can't be opened. Reason: " + reason);
             }
@@ -80,7 +85,7 @@ namespace BuilderStory
             var seconds = 1;
             var delay = new WaitForSecondsRealtime(seconds);
 
-            while (PauseSystem.Instance.IsFocusPaused == true || PauseSystem.Instance.IsAdPaused == true)
+            while (_pauseSystem.IsFocusPaused == true || _pauseSystem.IsAdPaused == true)
             {
                 yield return delay;
             }

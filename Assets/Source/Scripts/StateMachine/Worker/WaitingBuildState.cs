@@ -1,6 +1,8 @@
+using BuilderStory.Lifting;
+using BuilderStory.Struct;
 using UnityEngine;
 
-namespace BuilderStory
+namespace BuilderStory.States.Worker
 {
     public class WaitingBuildState : IBehaviour
     {
@@ -36,7 +38,7 @@ namespace BuilderStory
 
             foreach (var buildable in _buildables)
             {
-                if ( buildable.IsBuilding == true)
+                if (buildable.IsBuilding == true)
                 {
                     return false;
                 }

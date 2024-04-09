@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace BuilderStory
+namespace BuilderStory.UI.Canvases
 {
     public class PlayerUpgradesCanvas : UpgradesCanvas
     {
@@ -9,14 +9,28 @@ namespace BuilderStory
 
         protected override void SubscribeToEvents()
         {
-            SubscribeToUpgrades(_speedUpgrade, OnSpeedUpgradeButtonClicked, SpeedUpgradeAccsesable);
-            SubscribeToUpgrades(_capacityUpgrade, OnCapacityButtonClicked, CapacityUpgradeAccsesable);
+            SubscribeToUpgrades(
+                _speedUpgrade,
+                OnSpeedUpgradeButtonClicked,
+                SpeedUpgradeAccsesable);
+
+            SubscribeToUpgrades(
+                _capacityUpgrade,
+                OnCapacityButtonClicked,
+                CapacityUpgradeAccsesable);
         }
 
         protected override void UnsubscribeFromEvents()
         {
-            UnsubscribeFromUpgrades(_speedUpgrade, OnSpeedUpgradeButtonClicked, SpeedUpgradeAccsesable);
-            UnsubscribeFromUpgrades(_capacityUpgrade, OnCapacityButtonClicked, CapacityUpgradeAccsesable);
+            UnsubscribeFromUpgrades(
+                _speedUpgrade,
+                OnSpeedUpgradeButtonClicked,
+                SpeedUpgradeAccsesable);
+
+            UnsubscribeFromUpgrades(
+                _capacityUpgrade,
+                OnCapacityButtonClicked,
+                CapacityUpgradeAccsesable);
         }
 
         protected override void UpdateUI()

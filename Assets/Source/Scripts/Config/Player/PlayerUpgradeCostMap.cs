@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace BuilderStory
+namespace BuilderStory.Config.Player
 {
     public class PlayerUpgradeCostMap
     {
@@ -9,7 +9,7 @@ namespace BuilderStory
             { 1, 10 },
             { 2, 25 },
             { 3, 50 },
-            { 4, 70 }
+            { 4, 70 },
         };
 
         private Dictionary<int, int> _playerCapacityCosts = new Dictionary<int, int>
@@ -17,7 +17,7 @@ namespace BuilderStory
             { 1, 20 },
             { 2, 50 },
             { 3, 70 },
-            { 4, 90 }
+            { 4, 90 },
         };
 
         public int GetSpeedUpgradeCost(int level)

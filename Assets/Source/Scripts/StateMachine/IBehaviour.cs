@@ -1,4 +1,4 @@
-namespace BuilderStory
+namespace BuilderStory.States
 {
     public interface IBehaviour
     {

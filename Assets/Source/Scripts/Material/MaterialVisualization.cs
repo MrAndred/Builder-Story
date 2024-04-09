@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-namespace BuilderStory
+namespace BuilderStory.BuildingMaterial
 {
     [Serializable]
     public class MaterialVisualization

@@ -1,9 +1,16 @@
-using DG.Tweening;
-using System.Collections;
+using BuilderStory.Advertisement;
+using BuilderStory.Audio;
+using BuilderStory.Builder;
+using BuilderStory.Leaderbord;
+using BuilderStory.Pause;
+using BuilderStory.ReputationSystem;
+using BuilderStory.Saves;
+using BuilderStory.UI;
+using BuilderStory.Upgrades;
+using BuilderStory.WalletSystem;
 using UnityEngine;
-using UnityEngine.UI;
 
-namespace BuilderStory
+namespace BuilderStory.Root
 {
     public class LevelUIRoot : MonoBehaviour
     {
@@ -19,7 +26,6 @@ namespace BuilderStory
         [SerializeField] private BoostersGroup _boostersGroup;
         [SerializeField] private AdCanvas _adCanvas;
 
-        private ProgressSaves _saveObject;
         private Reputation _reputation;
 
         private void OnEnable()
@@ -38,21 +44,25 @@ namespace BuilderStory
             }
         }
 
-        public void Init(Reputation reputation, Wallet wallet, ProgressSaves saveObject)
+        public void Init(
+            Reputation reputation,
+            Wallet wallet,
+            ProgressSaves saveObject,
+            PauseSystem pauseSystem,
+            AudioManager audioSystem)
         {
             _reputation = reputation;
-            _saveObject = saveObject;
 
-            _adCanvas.Init();
+            _adCanvas.Init(pauseSystem);
 
             _contractRenderer.Init();
             _walletRenderer.Init(wallet);
             _reputationRenderer.Init(reputation, saveObject.Reputation, saveObject.Level);
             _upgradeRenderer.Init(wallet, saveObject);
-            _leaderbordRenderer.Init(saveObject);
-            _musicToggler.Init();
-            _nextLevelButton.Init(saveObject, _adCanvas);
-            _boostersGroup.Init(saveObject, wallet);
+            _leaderbordRenderer.Init();
+            _musicToggler.Init(audioSystem);
+            _nextLevelButton.Init(saveObject, pauseSystem);
+            _boostersGroup.Init(saveObject, wallet, pauseSystem);
 
             _reputation.ReachedMaxReputation += OnReachedMaxReputation;
         }
@@ -60,11 +70,6 @@ namespace BuilderStory
         private void OnReachedMaxReputation()
         {
             _nextLevelButton.Show();
-        }
-
-        private void OnResetSaves()
-        {
-            _saveObject.ResetData();
         }
     }
 }

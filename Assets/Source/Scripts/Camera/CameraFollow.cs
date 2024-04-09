@@ -1,6 +1,7 @@
+using BuilderStory.PlayerSystem;
 using UnityEngine;
 
-namespace BuilderStory
+namespace BuilderStory.GameCamera
 {
     public class CameraFollow : MonoBehaviour
     {

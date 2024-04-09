@@ -1,10 +1,10 @@
-using Lean.Localization;
 using System;
+using Lean.Localization;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace BuilderStory
+namespace BuilderStory.UI
 {
     public class UpgradeContainerRenderer : MonoBehaviour
     {
@@ -56,7 +56,6 @@ namespace BuilderStory
         {
             _upgradeButton.interactable = false;
         }
-
 
         private void OnButtonClickedHandler()
         {

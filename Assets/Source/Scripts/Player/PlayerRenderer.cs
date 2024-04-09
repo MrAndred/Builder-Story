@@ -1,7 +1,9 @@
 using System;
+using BuilderStory.Builder;
+using BuilderStory.Struct;
 using UnityEngine;
 
-namespace BuilderStory
+namespace BuilderStory.PlayerSystem
 {
     public class PlayerRenderer : MonoBehaviour
     {
@@ -10,20 +12,20 @@ namespace BuilderStory
 
         private Structure _structure;
 
-        public event Action OnContractAccepted;
+        public event Action ContractAccepted;
 
         private void OnEnable()
         {
-            _contractInfoRenderer.OnInfoClicked += InfoClicked;
-            _contractRenderer.OnCloseClicked += ContractClosed;
-            _contractRenderer.OnBuildClicked += ContractAccepted;
+            _contractInfoRenderer.InfoClicked += OnInfoClicked;
+            _contractRenderer.ClickedClose += OnContractClosed;
+            _contractRenderer.ClickedBuild += OnContractAccepted;
         }
 
         private void OnDisable()
         {
-            _contractInfoRenderer.OnInfoClicked -= InfoClicked;
-            _contractRenderer.OnCloseClicked -= ContractClosed;
-            _contractRenderer.OnBuildClicked -= ContractAccepted;
+            _contractInfoRenderer.InfoClicked -= OnInfoClicked;
+            _contractRenderer.ClickedClose -= OnContractClosed;
+            _contractRenderer.ClickedBuild -= OnContractAccepted;
         }
 
         public void Show(Structure structure)
@@ -43,21 +45,21 @@ namespace BuilderStory
             _contractRenderer.Hide();
         }
 
-        private void InfoClicked()
+        private void OnInfoClicked()
         {
             _contractInfoRenderer.Hide();
             _contractRenderer.Show(_structure);
         }
 
-        private void ContractClosed()
+        private void OnContractClosed()
         {
             _contractInfoRenderer.Show();
             _contractRenderer.Hide();
         }
 
-        private void ContractAccepted()
+        private void OnContractAccepted()
         {
-            OnContractAccepted?.Invoke();
+            ContractAccepted?.Invoke();
 
             _contractInfoRenderer.Hide();
             _contractRenderer.Hide();

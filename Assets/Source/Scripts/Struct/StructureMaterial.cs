@@ -1,19 +1,19 @@
-﻿using DG.Tweening;
-using System;
+﻿using System;
+using BuilderStory.BuildingMaterial;
+using BuilderStory.Lifting;
 using UnityEngine;
 
-namespace BuilderStory
+namespace BuilderStory.Struct
 {
     public class StructureMaterial
     {
         private MeshRenderer _meshRenderer;
-        private Sequence _place;
         private Material _default;
         private Material _highlighted;
         private bool _isHighlighted;
 
         public StructureMaterial(
-            BuildMaterial material, 
+            BuildMaterial material,
             MeshRenderer meshRenderer,
             Material defaultMaterial,
             Material highlighted
@@ -40,11 +40,6 @@ namespace BuilderStory
         public BuildMaterial Material { get; private set; }
 
         public bool Highlighted => _isHighlighted;
-
-        public void Disable()
-        {
-            _place?.Kill();
-        }
 
         public void Place()
         {

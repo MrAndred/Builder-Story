@@ -1,4 +1,6 @@
-namespace BuilderStory
+using BuilderStory.Config.Worker;
+
+namespace BuilderStory.Saves.Worker
 {
     public class WorkerModel
     {
@@ -31,19 +33,22 @@ namespace BuilderStory
 
         public int Count => _workerUpgradeMap.GetCount(_countLevel);
 
-        public int CountUpgradeCost => _workerUpgradeCostMap.GetCountUpgradeCost(_countLevel);
+        public int CountUpgradeCost =>
+            _workerUpgradeCostMap.GetCountUpgradeCost(_countLevel);
 
         public int SpeedLevel => _speedLevel;
 
         public float Speed => _workerUpgradeMap.GetSpeed(_speedLevel);
 
-        public int SpeedUpgradeCost => _workerUpgradeCostMap.GetSpeedUpgradeCost(_speedLevel);
+        public int SpeedUpgradeCost =>
+            _workerUpgradeCostMap.GetSpeedUpgradeCost(_speedLevel);
 
         public int CapacityLevel => _capacityLevel;
 
         public int Capacity => _workerUpgradeMap.GetCapacity(_capacityLevel);
 
-        public int CapacityUpgradeCost => _workerUpgradeCostMap.GetCapacityUpgradeCost(_capacityLevel);
+        public int CapacityUpgradeCost =>
+            _workerUpgradeCostMap.GetCapacityUpgradeCost(_capacityLevel);
 
         public void UpgradeSpeed()
         {

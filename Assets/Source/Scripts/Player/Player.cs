@@ -1,8 +1,17 @@
 using System;
 using System.Collections.Generic;
+using BuilderStory.Audio;
+using BuilderStory.Config.Audio;
+using BuilderStory.Lifting;
+using BuilderStory.Movement;
+using BuilderStory.ReputationSystem;
+using BuilderStory.Saves;
+using BuilderStory.States;
+using BuilderStory.States.Player;
+using BuilderStory.WalletSystem;
 using UnityEngine;
 
-namespace BuilderStory
+namespace BuilderStory.PlayerSystem
 {
     [RequireComponent(typeof(CapsuleCollider), typeof(PlayerMovement), typeof(Lift))]
     public class Player : MonoBehaviour
@@ -56,7 +65,12 @@ namespace BuilderStory
             _playerMovement?.Handle();
         }
 
-        public void Init(Wallet wallet, Reputation reputation, ProgressSaves progressSaves)
+        public void Init(
+            Wallet wallet,
+            Reputation reputation,
+            ProgressSaves progressSaves,
+            AudioManager audioManager,
+            AudioMap audioMap)
         {
             _originPosition = transform.position;
             _progressSaves = progressSaves;
@@ -64,21 +78,39 @@ namespace BuilderStory
 
             var behaviours = new Dictionary<Type, IBehaviour>
             {
-                {typeof(SearchState), _startBehaviour},
-                {typeof(PickupState), new PickupState(_animator, _lift, _pickupPoint, _interactDistance, _interactableMask)},
-                {typeof(PlacementState), new PlacementState(_animator , _lift, _interactDistance, _interactableMask)},
-                {typeof(PickContractState), new PickContractState(
-                    wallet,
-                    reputation,
-                    _playerRenderer,
-                    _interactableMask,
-                    transform,
-                    _interactDistance)},
+                { typeof(SearchState), _startBehaviour },
+                {
+                    typeof(PickupState),
+                    new PickupState(
+                        _animator,
+                        _lift,
+                        _pickupPoint,
+                        _interactDistance,
+                        _interactableMask)
+                },
+                {
+                    typeof(PlacementState),
+                    new PlacementState(
+                        _animator,
+                        _lift,
+                        _interactDistance,
+                        _interactableMask)
+                },
+                {
+                    typeof(PickContractState),
+                    new PickContractState(
+                        wallet,
+                        reputation,
+                        _playerRenderer,
+                        _interactableMask,
+                        transform,
+                        _interactDistance)
+                },
             };
 
             _stateMachine = new StateMachine(_startBehaviour, behaviours);
 
-            _lift.Init(_progressSaves.PlayerCapacity);
+            _lift.Init(_progressSaves.PlayerCapacity, audioManager, audioMap);
             _playerMovement.Init(_progressSaves.PlayerSpeed);
 
             _progressSaves.PlayerSpeedChanged += _playerMovement.ChangeSpeed;

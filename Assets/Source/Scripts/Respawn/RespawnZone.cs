@@ -1,6 +1,7 @@
+using BuilderStory.PlayerSystem;
 using UnityEngine;
 
-namespace BuilderStory
+namespace BuilderStory.Respawn
 {
     public class RespawnZone : MonoBehaviour
     {

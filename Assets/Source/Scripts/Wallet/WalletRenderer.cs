@@ -1,7 +1,7 @@
 using TMPro;
 using UnityEngine;
 
-namespace BuilderStory
+namespace BuilderStory.WalletSystem
 {
     public class WalletRenderer : MonoBehaviour
     {
@@ -15,7 +15,6 @@ namespace BuilderStory
             {
                 _wallet.MoneyChanged += Render;
             }
-
         }
 
         private void OnDisable()

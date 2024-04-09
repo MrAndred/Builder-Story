@@ -1,7 +1,10 @@
 using System.Collections;
+using BuilderStory.ReputationSystem;
+using BuilderStory.Struct;
+using BuilderStory.WalletSystem;
 using UnityEngine;
 
-namespace BuilderStory
+namespace BuilderStory.Builder
 {
     public class BuildContract
     {
@@ -19,10 +22,7 @@ namespace BuilderStory
             _structure = structure;
             _wallet = wallet;
             _reputation = reputation;
-
-            Build();
         }
-
 
         public void Build()
         {

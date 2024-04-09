@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace BuilderStory
+namespace BuilderStory.WorkerSystem
 {
     [CreateAssetMenu(fileName = "WorkerSkins", menuName = "BuilderStory/WorkerSkins")]
     public class WorkerSkinPerLevel : ScriptableObject

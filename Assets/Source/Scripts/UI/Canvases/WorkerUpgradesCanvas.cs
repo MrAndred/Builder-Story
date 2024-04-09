@@ -1,7 +1,6 @@
-using System;
 using UnityEngine;
 
-namespace BuilderStory
+namespace BuilderStory.UI.Canvases
 {
     public class WorkerUpgradesCanvas : UpgradesCanvas
     {
@@ -23,16 +22,38 @@ namespace BuilderStory
 
         protected override void SubscribeToEvents()
         {
-            SubscribeToUpgrades(_speedUpgrade, OnSpeedUpgradeButtonClicked, SpeedUpgradeAccsesable);
-            SubscribeToUpgrades(_capacityUpgrade, OnCapacityButtonClicked, CapacityUpgradeAccsesable);
-            SubscribeToUpgrades(_countUpgrade, OnCountUpgradeButtonClicked, CountUpgradeAccsesable);
+            SubscribeToUpgrades(
+                _speedUpgrade,
+                OnSpeedUpgradeButtonClicked,
+                SpeedUpgradeAccsesable);
+
+            SubscribeToUpgrades(
+                _capacityUpgrade,
+                OnCapacityButtonClicked,
+                CapacityUpgradeAccsesable);
+
+            SubscribeToUpgrades(
+                _countUpgrade,
+                OnCountUpgradeButtonClicked,
+                CountUpgradeAccsesable);
         }
 
         protected override void UnsubscribeFromEvents()
         {
-            UnsubscribeFromUpgrades(_speedUpgrade, OnSpeedUpgradeButtonClicked, SpeedUpgradeAccsesable);
-            UnsubscribeFromUpgrades(_capacityUpgrade, OnCapacityButtonClicked, CapacityUpgradeAccsesable);
-            UnsubscribeFromUpgrades(_countUpgrade, OnCountUpgradeButtonClicked, CountUpgradeAccsesable);
+            UnsubscribeFromUpgrades(
+                _speedUpgrade,
+                OnSpeedUpgradeButtonClicked,
+                SpeedUpgradeAccsesable);
+
+            UnsubscribeFromUpgrades(
+                _capacityUpgrade,
+                OnCapacityButtonClicked,
+                CapacityUpgradeAccsesable);
+
+            UnsubscribeFromUpgrades(
+                _countUpgrade,
+                OnCountUpgradeButtonClicked,
+                CountUpgradeAccsesable);
         }
 
         private void OnSpeedUpgradeButtonClicked(int cost)

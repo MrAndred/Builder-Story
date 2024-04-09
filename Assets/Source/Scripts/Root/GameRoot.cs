@@ -1,11 +1,13 @@
-using Agava.YandexGames;
 using System.Collections;
+using Agava.YandexGames;
+using BuilderStory.Saves;
+using BuilderStory.Util;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-namespace BuilderStory
+namespace BuilderStory.Root
 {
     public class GameRoot : MonoBehaviour
     {
@@ -42,7 +44,9 @@ namespace BuilderStory
         {
             yield return new WaitUntil(() => _dataReceived == true);
 
-            yield return StartCoroutine(LoadSceneWithProgressBar(BuilderStoryUtil.CalculateLevelIndex(_saveObject.Level)));
+            yield return StartCoroutine(
+                LoadSceneWithProgressBar(
+                    BuilderStoryUtil.CalculateLevelIndex(_saveObject.Level)));
         }
 
         private void OnLevelLoaded()
@@ -64,10 +68,18 @@ namespace BuilderStory
 
             while (!asyncOperation.isDone)
             {
-                float progress = asyncOperation.progress < _progressThreshold ? asyncOperation.progress : progressMax;
-                _loader.value = Mathf.Lerp(_loader.value, progress, _loadingSpeed * Time.deltaTime);
+                float progress = asyncOperation.progress < _progressThreshold
+                    ? asyncOperation.progress : progressMax;
 
-                string percent = string.Format(_percentTemplate, (int)(_loader.value * percentMultipplier));
+                _loader.value = Mathf.Lerp(
+                    _loader.value,
+                    progress,
+                    _loadingSpeed * Time.deltaTime);
+
+                string percent = string.Format(
+                    _percentTemplate,
+                    (int)(_loader.value * percentMultipplier));
+
                 _percentText.text = percent;
 
                 if (_loader.value >= _progressThreshold)

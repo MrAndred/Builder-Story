@@ -1,7 +1,7 @@
 using DG.Tweening;
 using UnityEngine;
 
-namespace BuilderStory
+namespace BuilderStory.Struct
 {
     public class StructureTip : MonoBehaviour
     {
@@ -9,7 +9,7 @@ namespace BuilderStory
         private const float FloatingDuration = 1f;
         private const int Loops = -1;
 
-        [SerializeField] private float YOriginPosition = 3f;
+        [SerializeField] private float _yOriginPosition = 3f;
 
         private Tweener _jumping;
 
@@ -20,10 +20,13 @@ namespace BuilderStory
 
         public void Init()
         {
-            transform.localPosition = new Vector3(transform.localPosition.x, YOriginPosition, transform.localPosition.z);
+            transform.localPosition = new Vector3(
+                transform.localPosition.x,
+                _yOriginPosition,
+                transform.localPosition.z);
 
             _jumping = transform
-                .DOLocalMoveY(YOriginPosition - YOffsetPosition, FloatingDuration)
+                .DOLocalMoveY(_yOriginPosition - YOffsetPosition, FloatingDuration)
                 .SetLoops(Loops, LoopType.Yoyo)
                 .SetEase(Ease.Linear);
         }

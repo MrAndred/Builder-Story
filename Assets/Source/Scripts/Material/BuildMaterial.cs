@@ -1,8 +1,9 @@
-using DG.Tweening;
 using System;
+using DG.Tweening;
+using BuilderStory.Lifting;
 using UnityEngine;
 
-namespace BuilderStory
+namespace BuilderStory.BuildingMaterial
 {
     public class BuildMaterial : MonoBehaviour, ILiftable
     {
@@ -17,9 +18,9 @@ namespace BuilderStory
         private Transform _parent;
         private Vector3 _originScale;
 
-        public event Action<ILiftable> OnPickedUp;
+        public event Action<ILiftable> PickedUp;
 
-        public event Action<ILiftable> OnPlaced;
+        public event Action<ILiftable> Placed;
 
         public Vector3 Position => transform.position;
 
@@ -47,7 +48,8 @@ namespace BuilderStory
             transform.SetParent(point);
 
             transform.localRotation = Quaternion.identity;
-            Tween jump = transform.DOLocalJump(Vector3.zero + offset, _jumpForce, JumpCount, duration)
+            Tween jump = transform
+                .DOLocalJump(Vector3.zero + offset, _jumpForce, JumpCount, duration)
                 .SetEase(Ease.OutFlash);
 
             _pickupSequence = DOTween.Sequence();
@@ -56,7 +58,7 @@ namespace BuilderStory
 
             _pickupSequence.OnComplete(() =>
             {
-                OnPickedUp?.Invoke(this);
+                PickedUp?.Invoke(this);
                 IsPickedUp = true;
             });
 
@@ -81,7 +83,7 @@ namespace BuilderStory
 
             _placeSequence.OnComplete(() =>
             {
-                OnPlaced?.Invoke(this);
+                Placed?.Invoke(this);
                 IsPlaced = true;
                 gameObject.SetActive(false);
                 ResetOptions();

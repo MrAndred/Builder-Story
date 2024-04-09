@@ -1,6 +1,7 @@
 using System;
+using BuilderStory.Saves;
 
-namespace BuilderStory
+namespace BuilderStory.WalletSystem
 {
     public class Wallet
     {

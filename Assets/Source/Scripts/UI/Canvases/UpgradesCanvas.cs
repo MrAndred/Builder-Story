@@ -1,12 +1,14 @@
 using System;
+using BuilderStory.Saves;
+using BuilderStory.WalletSystem;
 using UnityEngine;
 
-namespace BuilderStory
+namespace BuilderStory.UI.Canvases
 {
     public abstract class UpgradesCanvas : MonoBehaviour
     {
-        protected Wallet Wallet;
-        protected ProgressSaves Saves;
+        public Wallet Wallet;
+        public ProgressSaves Saves;
 
         public void Init(Wallet wallet, ProgressSaves saves)
         {
@@ -31,17 +33,17 @@ namespace BuilderStory
 
         protected void SubscribeToUpgrades(
                UpgradeContainerRenderer containerRenderer,
-                        Action<int> containerClickHandler,
-                                    Action walletHandler)
+               Action<int> containerClickHandler,
+               Action walletHandler)
         {
             containerRenderer.OnButtonClicked += containerClickHandler;
             Wallet.MoneyChanged += walletHandler;
         }
 
         protected void UnsubscribeFromUpgrades(
-                       UpgradeContainerRenderer containerRenderer,
-                                  Action<int> containerClickHandler,
-                                             Action walletHandler)
+            UpgradeContainerRenderer containerRenderer,
+            Action<int> containerClickHandler,
+            Action walletHandler)
         {
             containerRenderer.OnButtonClicked -= containerClickHandler;
             Wallet.MoneyChanged -= walletHandler;
@@ -71,10 +73,9 @@ namespace BuilderStory
         }
 
         protected abstract void UpdateUI();
-        
+
         protected abstract void SubscribeToEvents();
-        
+
         protected abstract void UnsubscribeFromEvents();
     }
-
 }
