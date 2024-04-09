@@ -1,6 +1,7 @@
+using BuilderStory.Warehouse;
 using UnityEngine;
 
-namespace BuilderStory
+namespace BuilderStory.Root
 {
     public class MaterialSourcesRoot : MonoBehaviour
     {

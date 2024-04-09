@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace BuilderStory
+namespace BuilderStory.UI
 {
     public class NotAuthRenderer : MonoBehaviour
     {

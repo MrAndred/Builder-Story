@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace BuilderStory
+namespace BuilderStory.Config.Worker
 {
     public class WorkerUpgradeCostMap
     {
@@ -9,7 +9,7 @@ namespace BuilderStory
             { 1, 20 },
             { 2, 40 },
             { 3, 70 },
-            { 4, 90 }
+            { 4, 90 },
         };
 
         private Dictionary<int, int> _workerCapacityCosts = new Dictionary<int, int>
@@ -17,7 +17,7 @@ namespace BuilderStory
             { 1, 50 },
             { 2, 75 },
             { 3, 100 },
-            { 4, 125 }
+            { 4, 125 },
         };
 
         private Dictionary<int, int> _workerCountCosts = new Dictionary<int, int>

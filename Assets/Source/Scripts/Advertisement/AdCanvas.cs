@@ -1,7 +1,8 @@
+using BuilderStory.Pause;
 using System.Collections;
 using UnityEngine;
 
-namespace BuilderStory
+namespace BuilderStory.Advertisement
 {
     public class AdCanvas : MonoBehaviour
     {
@@ -13,12 +14,11 @@ namespace BuilderStory
 
         [SerializeField] private InterstitialTip _interTip;
 
-        private Coroutine _coroutine;
         private Coroutine _cronInterstitalAd;
 
         private void OnEnable()
         {
-            if (_coroutine == null)
+            if (_cronInterstitalAd == null)
             {
                 _cronInterstitalAd = StartCoroutine(CronShowInterstitial());
             }
@@ -26,35 +26,31 @@ namespace BuilderStory
 
         private void OnDisable()
         {
-            if (_coroutine != null)
-            {
-                StopCoroutine(_coroutine);
-            }
-
             if (_cronInterstitalAd != null)
             {
                 StopCoroutine(_cronInterstitalAd);
             }
         }
 
-        public void Init()
+        public void Init(PauseSystem pauseSystem)
         {
+            _interTip.Init(pauseSystem);
             ShowInterstitialAd();
         }
 
-        public void ShowPopupInterstitialAd()
+        private void ShowPopupInterstitialAd()
         {
             _interTip.ShowPopup();
         }
 
-        public void ShowInterstitialAd()
+        private void ShowInterstitialAd()
         {
             _interTip.Show();
         }
 
         private IEnumerator CronShowInterstitial()
         {
-            while (gameObject.activeSelf == true)
+            while (gameObject.activeSelf)
             {
                 yield return new WaitForSeconds(SecondsDelayToShowInterstitialAd);
                 ShowPopupInterstitialAd();

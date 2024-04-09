@@ -1,7 +1,9 @@
 using System.Collections.Generic;
+using BuilderStory.BuildingMaterial;
+using BuilderStory.UI;
 using UnityEngine;
 
-namespace BuilderStory
+namespace BuilderStory.Struct
 {
     public class StructureCanvas : MonoBehaviour
     {

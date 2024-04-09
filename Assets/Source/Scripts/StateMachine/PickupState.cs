@@ -1,7 +1,9 @@
 using System.Collections;
+using BuilderStory.Lifting;
+using BuilderStory.Warehouse;
 using UnityEngine;
 
-namespace BuilderStory
+namespace BuilderStory.States
 {
     public class PickupState : IBehaviour
     {
@@ -50,7 +52,10 @@ namespace BuilderStory
                 return false;
             }
 
-            var colliders = Physics.OverlapSphere(_lift.transform.position, _pickupDistance, _warehouseLayer);
+            var colliders = Physics.OverlapSphere(
+                _lift.transform.position,
+                _pickupDistance,
+                _warehouseLayer);
 
             if (colliders.Length == 0)
             {
@@ -78,7 +83,6 @@ namespace BuilderStory
 
         public void Update()
         {
-
         }
 
         private IEnumerator StartPickup()

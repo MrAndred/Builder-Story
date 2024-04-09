@@ -1,6 +1,8 @@
+using BuilderStory.Lifting;
+using BuilderStory.Struct;
 using UnityEngine;
 
-namespace BuilderStory
+namespace BuilderStory.Observer
 {
     public class InventoryObserver
     {
@@ -15,37 +17,37 @@ namespace BuilderStory
 
         public void Subscribe(IReadOnlyLift lift)
         {
-            lift.OnPickedUp += PickedUp;
+            lift.PickedUp += PickedUp;
         }
 
         public void SubscribePlayer(IReadOnlyLift lift)
         {
-            lift.OnPickedUp += PlayerPickedUp;
+            lift.PickedUp += PlayerPickedUp;
             lift.OnDropped += Dropped;
         }
 
         public void Unsubscribe(IReadOnlyLift lift)
         {
-            lift.OnPickedUp -= PickedUp;
+            lift.PickedUp -= PickedUp;
         }
 
         public void UnsubscribePlayer(IReadOnlyLift lift)
         {
-            lift.OnPickedUp -= PlayerPickedUp;
+            lift.PickedUp -= PlayerPickedUp;
             lift.OnDropped -= Dropped;
         }
 
         private void PickedUp(ILiftable liftable)
         {
             var structure = GetBuildingStructure();
-            structure.TryHighlight(liftable);
+            structure.Highlight(liftable);
         }
 
         private void PlayerPickedUp(ILiftable liftable)
         {
             foreach (var structure in _structures)
             {
-                structure.TryHighlight(liftable);
+                structure.Highlight(liftable);
             }
         }
 
@@ -55,15 +57,16 @@ namespace BuilderStory
 
             foreach (var collider in colliders)
             {
-                if (collider.TryGetComponent(out Structure structure) == true)
+                if (collider.TryGetComponent(out Structure structure) == false)
                 {
+                    continue;
                 }
 
                 foreach (var notPlacedSturcture in _structures)
                 {
                     if (notPlacedSturcture != structure)
                     {
-                        notPlacedSturcture.TryUnhighlight(liftable);
+                        notPlacedSturcture.Unhighlight(liftable);
                     }
                 }
 

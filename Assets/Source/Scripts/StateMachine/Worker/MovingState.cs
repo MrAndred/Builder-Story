@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.AI;
 
-namespace BuilderStory
+namespace BuilderStory.States.Worker
 {
     public class MovingState : IBehaviour
     {
@@ -26,7 +26,6 @@ namespace BuilderStory
 
         public void Enter()
         {
-
         }
 
         public void Exit()

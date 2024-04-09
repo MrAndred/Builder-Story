@@ -1,9 +1,9 @@
-using DG.Tweening;
-using UnityEngine.UI;
-using UnityEngine;
 using System;
+using DG.Tweening;
+using UnityEngine;
+using UnityEngine.UI;
 
-namespace BuilderStory
+namespace BuilderStory.Builder
 {
     public class ContractInfoRenderer : MonoBehaviour
     {
@@ -17,34 +17,38 @@ namespace BuilderStory
 
         private Tweener _tweener;
 
-        public event Action OnInfoClicked;
+        public event Action InfoClicked;
 
         private void OnEnable()
         {
-            _infoContract.onClick.AddListener(InfoClicked);
+            _infoContract.onClick.AddListener(OnClicked);
         }
 
         private void OnDisable()
         {
             _tweener?.Kill();
-            _infoContract.onClick.RemoveListener(InfoClicked);
+            _infoContract.onClick.RemoveListener(OnClicked);
         }
 
         public void Show()
         {
             _infoContract.interactable = true;
-            _tweener = _infoContractTransform.DOAnchorPos(_showContractLocalPosition, AppearDuration).SetEase(Ease.OutBounce);
+            _tweener = _infoContractTransform
+                .DOAnchorPos(_showContractLocalPosition, AppearDuration)
+                .SetEase(Ease.OutBounce);
         }
 
         public void Hide()
         {
             _infoContract.interactable = false;
-            _tweener = _infoContractTransform.DOAnchorPos(_hideContractLocalPosition, AppearDuration).SetEase(Ease.InCubic);
+            _tweener = _infoContractTransform
+                .DOAnchorPos(_hideContractLocalPosition, AppearDuration)
+                .SetEase(Ease.InCubic);
         }
 
-        private void InfoClicked()
+        private void OnClicked()
         {
-            OnInfoClicked?.Invoke();
+            InfoClicked?.Invoke();
         }
     }
 }

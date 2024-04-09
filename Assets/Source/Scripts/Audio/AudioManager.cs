@@ -1,19 +1,24 @@
 using UnityEngine;
 
-namespace BuilderStory
+namespace BuilderStory.Audio
 {
     public class AudioManager : MonoBehaviour
     {
+        private const string Muted = "Muted";
+        private const int MuteOff = 0;
+        private const int MuteOn = 1;
+        private const float MusicVolume = 0.35f;
+
         public static AudioManager Instance { get; private set; }
 
-        private AudioSource musicSource;
-        private AudioSource sfxSource;
+        private AudioSource _musicSource;
+        private AudioSource _sfxSource;
 
-        public bool IsMuted => musicSource.mute;
+        public bool IsMuted => _musicSource.mute;
 
         public void Init()
         {
-            bool muted = PlayerPrefs.GetInt("Muted", 0) == 1;
+            bool muted = PlayerPrefs.GetInt(Muted, MuteOff) == MuteOn;
 
             if (Instance == null)
             {
@@ -25,56 +30,56 @@ namespace BuilderStory
                 Destroy(gameObject);
             }
 
-            if (musicSource == null)
+            if (_musicSource == null)
             {
-                musicSource = gameObject.AddComponent<AudioSource>();
+                _musicSource = gameObject.AddComponent<AudioSource>();
             }
 
-            musicSource.loop = true;
-            musicSource.volume = 0.35f;
+            _musicSource.loop = true;
+            _musicSource.volume = MusicVolume;
 
-            if (sfxSource == null)
+            if (_sfxSource == null)
             {
-                sfxSource = gameObject.AddComponent<AudioSource>();
+                _sfxSource = gameObject.AddComponent<AudioSource>();
             }
 
-            sfxSource.loop = false;
+            _sfxSource.loop = false;
 
-            sfxSource.mute = muted;
-            musicSource.mute = muted;
+            _sfxSource.mute = muted;
+            _musicSource.mute = muted;
         }
 
         public void PlayMusic(AudioClip musicClip)
         {
-            musicSource.clip = musicClip;
-            musicSource.Play();
+            _musicSource.clip = musicClip;
+            _musicSource.Play();
         }
 
         public void PlaySFX(AudioClip sfxClip)
         {
-            sfxSource.PlayOneShot(sfxClip);
+            _sfxSource.PlayOneShot(sfxClip);
         }
 
         public void ToggleMute()
         {
             bool newMute = !IsMuted;
 
-            musicSource.mute = newMute;
-            sfxSource.mute = newMute;
+            _musicSource.mute = newMute;
+            _sfxSource.mute = newMute;
 
-            PlayerPrefs.SetInt("Muted", newMute ? 1 : 0);
+            PlayerPrefs.SetInt(Muted, newMute ? MuteOn : MuteOff);
         }
 
         public void PauseAll()
         {
-            musicSource.Pause();
-            sfxSource.Pause();
+            _musicSource.Pause();
+            _sfxSource.Pause();
         }
 
         public void ResumeAll()
         {
-            musicSource.UnPause();
-            sfxSource.UnPause();
+            _musicSource.UnPause();
+            _sfxSource.UnPause();
         }
     }
 }

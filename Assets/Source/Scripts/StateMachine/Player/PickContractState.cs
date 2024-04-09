@@ -1,6 +1,11 @@
+using BuilderStory.Builder;
+using BuilderStory.PlayerSystem;
+using BuilderStory.ReputationSystem;
+using BuilderStory.Struct;
+using BuilderStory.WalletSystem;
 using UnityEngine;
 
-namespace BuilderStory
+namespace BuilderStory.States.Player
 {
     public class PickContractState : IBehaviour
     {
@@ -32,14 +37,17 @@ namespace BuilderStory
         public void Enter()
         {
             _renderer.Show(_structure);
-            _renderer.OnContractAccepted += ContractAccepted;
+            _renderer.ContractAccepted += ContractAccepted;
         }
 
         public void Exit()
         {
-            _renderer.OnContractAccepted -= ContractAccepted;
+            _renderer.ContractAccepted -= ContractAccepted;
 
-            var colliders = Physics.OverlapSphere(_raycastPoint.position, _interactDistance, _interactLayer);
+            var colliders = Physics.OverlapSphere(
+                _raycastPoint.position,
+                _interactDistance,
+                _interactLayer);
 
             if (colliders.Length == 0)
             {
@@ -48,12 +56,14 @@ namespace BuilderStory
             }
 
             _renderer.HideContract();
-
         }
 
         public bool IsReady()
         {
-            var colliders = Physics.OverlapSphere(_raycastPoint.position, _interactDistance, _interactLayer);
+            var colliders = Physics.OverlapSphere(
+                _raycastPoint.position,
+                _interactDistance,
+                _interactLayer);
 
             if (colliders.Length == 0)
             {
@@ -77,7 +87,6 @@ namespace BuilderStory
                     _structure = buildable;
                     return true;
                 }
-
             }
 
             return false;
@@ -85,7 +94,6 @@ namespace BuilderStory
 
         public void Update()
         {
-
         }
 
         private void ContractAccepted()

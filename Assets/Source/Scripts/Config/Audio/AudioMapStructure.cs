@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace BuilderStory
+namespace BuilderStory.Config.Audio
 {
     [System.Serializable]
     public class AudioMapStructure

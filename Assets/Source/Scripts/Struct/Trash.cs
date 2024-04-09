@@ -1,6 +1,8 @@
+using BuilderStory.BuildingMaterial;
+using BuilderStory.Lifting;
 using UnityEngine;
 
-namespace BuilderStory
+namespace BuilderStory.Struct
 {
     public class Trash : MonoBehaviour, IBuildable
     {
@@ -29,7 +31,7 @@ namespace BuilderStory
         {
             destination = _trashPoint;
 
-            liftable.OnPlaced += OnPlaced;
+            liftable.Placed += OnPlaced;
             return true;
         }
 
@@ -42,7 +44,7 @@ namespace BuilderStory
         {
             _placeEffect.transform.position = material.Position;
             _placeEffect.Play();
-            material.OnPlaced -= OnPlaced;
+            material.Placed -= OnPlaced;
         }
     }
 }

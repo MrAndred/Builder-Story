@@ -1,7 +1,10 @@
+using BuilderStory.Lifting;
+using BuilderStory.Navigation;
+using BuilderStory.Struct;
 using UnityEngine;
 using UnityEngine.AI;
 
-namespace BuilderStory
+namespace BuilderStory.States.Worker
 {
     public class UtilizeState : IBehaviour
     {
@@ -16,11 +19,11 @@ namespace BuilderStory
         private IBuildable[] _structures;
 
         public UtilizeState(
-            Navigator nagiator, 
-            Lift lift, 
-            NavMeshAgent navMeshAgent, 
-            IBuildable[] structures, 
-            float interactDistance, 
+            Navigator nagiator,
+            Lift lift,
+            NavMeshAgent navMeshAgent,
+            IBuildable[] structures,
+            float interactDistance,
             LayerMask layerMask)
         {
             _structures = structures;
@@ -39,7 +42,9 @@ namespace BuilderStory
             _navMeshAgent.SetDestination(trashPoint);
         }
 
-        public void Exit() { }
+        public void Exit()
+        {
+        }
 
         public bool IsReady()
         {

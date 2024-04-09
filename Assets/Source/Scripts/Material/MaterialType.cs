@@ -1,4 +1,4 @@
-﻿namespace BuilderStory
+﻿namespace BuilderStory.BuildingMaterial
 {
     public enum MaterialType
     {

@@ -1,6 +1,9 @@
+using BuilderStory.BuildingMaterial;
+using BuilderStory.Struct;
+using BuilderStory.Warehouse;
 using UnityEngine;
 
-namespace BuilderStory
+namespace BuilderStory.Navigation
 {
     public class Navigator : MonoBehaviour
     {

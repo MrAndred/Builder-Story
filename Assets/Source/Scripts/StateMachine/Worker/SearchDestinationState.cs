@@ -1,7 +1,11 @@
+using BuilderStory.BuildingMaterial;
+using BuilderStory.Lifting;
+using BuilderStory.Navigation;
+using BuilderStory.Struct;
 using UnityEngine;
 using UnityEngine.AI;
 
-namespace BuilderStory
+namespace BuilderStory.States.Worker
 {
     public class SearchDestinationState : IBehaviour
     {
@@ -12,15 +16,19 @@ namespace BuilderStory
         private NavMeshAgent _agent;
         private Lift _lift;
 
-        private bool HasBuilding => HasBuildingStructure();
-
-        public SearchDestinationState(Navigator navigator, IBuildable[] structures, NavMeshAgent agent, Lift lift)
+        public SearchDestinationState(
+            Navigator navigator,
+            IBuildable[] structures,
+            NavMeshAgent agent,
+            Lift lift)
         {
             _navigator = navigator;
             _structures = structures;
             _agent = agent;
             _lift = lift;
         }
+
+        private bool HasBuilding => HasBuildingStructure();
 
         public void Enter()
         {
@@ -49,10 +57,8 @@ namespace BuilderStory
             }
         }
 
-
         public void Exit()
         {
-
         }
 
         public bool IsReady()
@@ -82,7 +88,6 @@ namespace BuilderStory
 
         public void Update()
         {
-
         }
 
         private bool HasBuildingStructure()

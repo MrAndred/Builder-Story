@@ -1,10 +1,9 @@
-using UnityEngine;
-using UnityEngine.UI;
 using DG.Tweening;
 using TMPro;
-using UnityEngine.SceneManagement;
+using UnityEngine;
+using UnityEngine.UI;
 
-namespace BuilderStory
+namespace BuilderStory.ReputationSystem
 {
     public class ReputationRenderer : MonoBehaviour
     {
@@ -49,7 +48,9 @@ namespace BuilderStory
         public void Render()
         {
             _filling?.Kill();
-            _filling = _reputationSlider.DOValue(_levelReputation.Current, FillingDuration).SetEase(Ease.Linear);
+            _filling = _reputationSlider
+                .DOValue(_levelReputation.Current, FillingDuration)
+                .SetEase(Ease.Linear);
         }
     }
 }

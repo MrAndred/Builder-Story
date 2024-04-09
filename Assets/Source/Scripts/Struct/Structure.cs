@@ -1,9 +1,16 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using BuilderStory.Audio;
+using BuilderStory.BuildingMaterial;
+using BuilderStory.Config.Audio;
+using BuilderStory.Config.BuildMaterial;
+using BuilderStory.Lifting;
+using BuilderStory.ReputationSystem;
+using BuilderStory.WalletSystem;
 using UnityEngine;
 
-namespace BuilderStory
+namespace BuilderStory.Struct
 {
     public class Structure : MonoBehaviour, IBuildable
     {
@@ -21,13 +28,14 @@ namespace BuilderStory
         [SerializeField] private ParticleSystem _placeEffect;
         [SerializeField] private Transform _buildedStructure;
 
-
         private StructureMaterial[] _structMaterials;
         private Dictionary<MaterialType, int> _materials = new Dictionary<MaterialType, int>();
 
         private Wallet _wallet;
         private Reputation _reputation;
         private bool _isInitialized = false;
+        private AudioManager _audioManager;
+        private AudioMap _audioMap;
 
         public event Action Placed;
 
@@ -38,8 +46,6 @@ namespace BuilderStory
         public bool IsBuilding { get; private set; } = false;
 
         public int MaterialsCount => _structMaterials.Length;
-
-        public int PlacedMaterialsCount => GetPlacedMaterialsCount();
 
         private void OnEnable()
         {
@@ -58,13 +64,18 @@ namespace BuilderStory
         {
             foreach (var material in _structMaterials)
             {
-                material.Disable();
                 material.Placed -= OnPlaced;
             }
         }
 
-        public void Init(BuildMaterialMap buildMaterialMap, Material highlight)
+        public void Init(
+            BuildMaterialMap buildMaterialMap,
+            Material highlight,
+            AudioManager audioManager,
+            AudioMap audioMap)
         {
+            _audioManager = audioManager;
+            _audioMap= audioMap;
             _tip?.Init();
 
             var materials = GetComponentsInChildren<BuildMaterial>();
@@ -75,9 +86,10 @@ namespace BuilderStory
             {
                 var meshRenderer = materials[i].GetComponent<MeshRenderer>();
                 var buildMaterial = materials[i];
+
                 _structMaterials[i] = new StructureMaterial(
-                    buildMaterial, 
-                    meshRenderer, 
+                    buildMaterial,
+                    meshRenderer,
                     buildMaterialMap.GetMaterial(buildMaterial.Type),
                     highlight);
             }
@@ -90,8 +102,8 @@ namespace BuilderStory
                 {
                     _materials.Add(
                         structMaterial.Type,
-                        _structMaterials.Count(material => material.Material.Type == structMaterial.Type
-                    ));
+                        _structMaterials
+                            .Count(material => material.Material.Type == structMaterial.Type));
                 }
 
                 material.Placed += OnPlaced;
@@ -206,7 +218,7 @@ namespace BuilderStory
             }
         }
 
-        public void TryHighlight(ILiftable material)
+        public void Highlight(ILiftable material)
         {
             if (IsBuilding == false || IsBuilt() == true)
             {
@@ -216,10 +228,9 @@ namespace BuilderStory
             foreach (var structMaterial in _structMaterials)
             {
                 if (
-                    structMaterial.IsPlaced == false && 
+                    structMaterial.IsPlaced == false &&
                     structMaterial.Material.Type == material.Type &&
-                    structMaterial.Highlighted == false
-                    )
+                    structMaterial.Highlighted == false)
                 {
                     structMaterial.Highlight();
                     return;
@@ -227,7 +238,7 @@ namespace BuilderStory
             }
         }
 
-        public void TryUnhighlight(ILiftable material)
+        public void Unhighlight(ILiftable material)
         {
             if (IsBuilding == false || IsBuilt() == true)
             {
@@ -267,7 +278,7 @@ namespace BuilderStory
             _areaTip.gameObject.SetActive(false);
             _canvas?.Hide();
             _buildedStructure.gameObject.SetActive(true);
-            AudioManager.Instance.PlaySFX(AudioMap.Instance.GetAudioClip(Fireworks));
+            _audioManager.PlaySFX(_audioMap.GetAudioClip(Fireworks));
             gameObject.SetActive(false);
         }
 
@@ -288,21 +299,6 @@ namespace BuilderStory
             {
                 _buildEffect.Play();
             }
-        }
-
-        private int GetPlacedMaterialsCount()
-        {
-            int count = 0;
-
-            foreach (var material in _structMaterials)
-            {
-                if (material.IsPlaced)
-                {
-                    count++;
-                }
-            }
-
-            return count;
         }
     }
 }

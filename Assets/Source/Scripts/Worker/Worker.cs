@@ -1,9 +1,17 @@
 using System;
 using System.Collections.Generic;
+using BuilderStory.Audio;
+using BuilderStory.Config.Audio;
+using BuilderStory.Lifting;
+using BuilderStory.Navigation;
+using BuilderStory.Saves;
+using BuilderStory.States;
+using BuilderStory.States.Worker;
+using BuilderStory.Struct;
 using UnityEngine;
 using UnityEngine.AI;
 
-namespace BuilderStory
+namespace BuilderStory.WorkerSystem
 {
     [RequireComponent(typeof(Lift))]
     public class Worker : MonoBehaviour
@@ -54,30 +62,57 @@ namespace BuilderStory
             _stateMachine?.Update();
         }
 
-        public void Init(Structure[] buildables, Navigator navigator, ProgressSaves progressSaves)
+        public void Init(
+            Structure[] buildables,
+            Navigator navigator,
+            ProgressSaves progressSaves,
+            AudioManager audioManager,
+            AudioMap audioMap)
         {
             _progressSaves = progressSaves;
             _buildables = buildables;
             _navigator = navigator;
 
-            _lift.Init(progressSaves.WorkersCapacity);
+            _lift.Init(progressSaves.WorkersCapacity, audioManager,  audioMap);
             _navMeshAgent.speed = progressSaves.WorkersSpeed;
 
             var behaviours = new Dictionary<Type, IBehaviour>
             {
-                {typeof(WaitingBuildState), new WaitingBuildState(_animator, buildables, _lift)},
-                {typeof(MovingState), new MovingState(_animator, _navMeshAgent, _interactDistance )},
-                {typeof(PickupState), new PickupState(_animator, _lift, _pickupPoint, _interactDistance, _layerMask )},
-                {typeof(PlacementState), new PlacementState(_animator, _lift, _interactDistance, _layerMask)},
-                {typeof(UtilizeState),
+                {
+                    typeof(WaitingBuildState),
+                    new WaitingBuildState(_animator, buildables, _lift)
+                },
+                {
+                    typeof(MovingState),
+                    new MovingState(_animator, _navMeshAgent, _interactDistance)
+                },
+                {
+                    typeof(PickupState),
+                    new PickupState(
+                        _animator,
+                        _lift,
+                        _pickupPoint,
+                        _interactDistance,
+                        _layerMask)
+                },
+                {
+                    typeof(PlacementState),
+                    new PlacementState(_animator, _lift, _interactDistance, _layerMask)
+                },
+                {
+                    typeof(UtilizeState),
                     new UtilizeState(
                         _navigator,
                         _lift,
                         _navMeshAgent,
                         _buildables,
                         _interactDistance,
-                        _layerMask)},
-                {typeof(SearchDestinationState), new SearchDestinationState(_navigator, _buildables, _navMeshAgent, _lift) },
+                        _layerMask)
+                },
+                {
+                    typeof(SearchDestinationState),
+                    new SearchDestinationState(_navigator, _buildables, _navMeshAgent, _lift)
+                },
             };
 
             _startBehaviour = behaviours[typeof(WaitingBuildState)];

@@ -1,12 +1,12 @@
+using System.Collections;
 using Agava.YandexGames;
 using Lean.Localization;
-using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.UI;
 
-namespace BuilderStory
+namespace BuilderStory.Leaderbord
 {
     public class LBPlayerContainer : MonoBehaviour
     {
@@ -23,7 +23,8 @@ namespace BuilderStory
         {
             string anonymous = LeanLocalization.GetTranslationText(AnonymousTranslation);
 
-            _name.text = string.IsNullOrEmpty(entry.player.publicName) ? anonymous : entry.player.publicName;
+            _name.text = string.IsNullOrEmpty(entry.player.publicName)
+                ? anonymous : entry.player.publicName;
 
             _rank.text = entry.rank.ToString();
             _score.text = entry.score.ToString();
@@ -56,7 +57,10 @@ namespace BuilderStory
                 else
                 {
                     Texture2D texture = DownloadHandlerTexture.GetContent(uwr);
-                    _avatar.sprite = Sprite.Create(texture, new Rect(0.0f, 0.0f, texture.width, texture.height), new Vector2(0.5f, 0.5f));
+                    _avatar.sprite = Sprite.Create(
+                        texture,
+                        new Rect(0.0f, 0.0f, texture.width, texture.height),
+                        new Vector2(0.5f, 0.5f));
                 }
             }
         }

@@ -1,8 +1,10 @@
 using System;
 using System.Collections;
+using BuilderStory.Saves.Player;
+using BuilderStory.Saves.Worker;
 using UnityEngine;
 
-namespace BuilderStory
+namespace BuilderStory.Saves
 {
     [Serializable]
     public class ProgressSaves
@@ -102,37 +104,6 @@ namespace BuilderStory
 #endif
         }
 
-        private IEnumerator SimulateInit()
-        {
-            yield return new WaitForSeconds(1);
-            DataLoaded?.Invoke();
-        }
-
-        public void ResetData()
-        {
-            _progressModel = new ProgressModel();
-            _playerModel = new PlayerModel();
-            _workerModel = new WorkerModel();
-
-#if UNITY_EDITOR != true
-            ProgressDTO Saves = new ProgressDTO
-            {
-                PlayerSpeedLevel = _playerModel.SpeedLevel,
-                PlayerCapacityLevel = _playerModel.CapacityLevel,
-                WorkersCountLevel = _workerModel.Count,
-                WorkersSpeedLevel = _workerModel.SpeedLevel,
-                WorkersCapacityLevel = _workerModel.CapacityLevel,
-                Reputation = _progressModel.Reputation,
-                Money = _progressModel.Money,
-                MoneyMultiplier = _progressModel.MoneyMultiplier,
-                Level = _progressModel.Level
-            };
-
-            Agava.YandexGames.Leaderboard.SetScore(LeaderbordName, 0);
-            Agava.YandexGames.PlayerAccount.SetCloudSaveData(JsonUtility.ToJson(Saves));
-#endif
-        }
-
         public void SaveData()
         {
 #if UNITY_EDITOR == true
@@ -224,6 +195,12 @@ namespace BuilderStory
         public void ResetMoneyMultiplier()
         {
             _progressModel.ResetMoneyMultiplier();
+        }
+
+        private IEnumerator SimulateInit()
+        {
+            yield return new WaitForSeconds(1);
+            DataLoaded?.Invoke();
         }
     }
 }

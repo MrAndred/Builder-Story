@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace BuilderStory
+namespace BuilderStory.Audio
 {
     public class MusicToggler : MonoBehaviour
     {
@@ -9,6 +9,8 @@ namespace BuilderStory
         [SerializeField] private Image _image;
         [SerializeField] private Sprite _onSprite;
         [SerializeField] private Sprite _offSprite;
+
+        private AudioManager _audioManager;
 
         private void OnEnable()
         {
@@ -20,20 +22,23 @@ namespace BuilderStory
             _button.onClick.RemoveListener(OnMusicHandlerClick);
         }
 
-        public void Init()
+        public void Init(AudioManager audioManager)
         {
+            _audioManager = audioManager;
+
             Render();
         }
 
         private void OnMusicHandlerClick()
         {
-            AudioManager.Instance.ToggleMute();
+            _audioManager.ToggleMute();
 
             Render();
         }
+
         private void Render()
         {
-            bool isMuted = AudioManager.Instance.IsMuted;
+            bool isMuted = _audioManager.IsMuted;
 
             if (isMuted)
             {

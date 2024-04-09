@@ -4,7 +4,7 @@ using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace BuilderStory
+namespace BuilderStory.UI
 {
     public class BoosterRenderer : MonoBehaviour
     {
@@ -53,7 +53,9 @@ namespace BuilderStory
             }
 
             _isShowing = false;
-            _container.DOAnchorPosX(_startXPosition, Duration).OnComplete(() => gameObject.SetActive(false));
+            _container
+                .DOAnchorPosX(_startXPosition, Duration)
+                .OnComplete(() => gameObject.SetActive(false));
         }
 
         private IEnumerator DelayHide()

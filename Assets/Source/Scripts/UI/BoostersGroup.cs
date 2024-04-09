@@ -1,8 +1,11 @@
 using System;
 using System.Collections;
+using BuilderStory.Pause;
+using BuilderStory.Saves;
+using BuilderStory.WalletSystem;
 using UnityEngine;
 
-namespace BuilderStory
+namespace BuilderStory.UI
 {
     public class BoostersGroup : MonoBehaviour
     {
@@ -16,6 +19,7 @@ namespace BuilderStory
 
         private ProgressSaves _saves;
         private Wallet _wallet;
+        private PauseSystem _pauseSystem;
 
         private void OnDisable()
         {
@@ -23,10 +27,11 @@ namespace BuilderStory
             _moneyAdd.OnClick -= AddClick;
         }
 
-        public void Init(ProgressSaves saves, Wallet wallet)
+        public void Init(ProgressSaves saves, Wallet wallet, PauseSystem pauseSystem)
         {
             _saves = saves;
             _wallet = wallet;
+            _pauseSystem= pauseSystem;
 
             _moneyAdd.OnClick += AddClick;
             _moneyMultiplier.OnClick += MuliplierClick;
@@ -48,8 +53,9 @@ namespace BuilderStory
 
         private void ShowRewarded(Action onRewarded)
         {
-            PauseSystem.Instance.AdPauseGame();
+            _pauseSystem.AdPauseGame();
 #if UNITY_EDITOR == true
+            _pauseSystem.AdResumeGame();
             return;
 #else
             Agava.YandexGames.VideoAd.Show(
@@ -63,18 +69,18 @@ namespace BuilderStory
 
         private void OnRewardedAdOpened()
         {
-            PauseSystem.Instance.AdPauseGame();
+            _pauseSystem.AdPauseGame();
         }
 
         private void OnRewardedAdError(string message)
         {
             Debug.LogWarning(message);
-            PauseSystem.Instance.AdResumeGame();
+            _pauseSystem.AdResumeGame();
         }
 
         private void OnRewardedClose()
         {
-            PauseSystem.Instance.AdResumeGame();
+            _pauseSystem.AdResumeGame();
         }
 
         private void OnMultiplierRewarded()

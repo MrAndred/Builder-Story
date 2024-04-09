@@ -1,14 +1,16 @@
 using System.Collections;
+using BuilderStory.Lifting;
+using BuilderStory.Struct;
 using UnityEngine;
 
-namespace BuilderStory
+namespace BuilderStory.States
 {
     public class PlacementState : IBehaviour
     {
         private const string Placement = "Pickup";
 
         private readonly Animator _animator;
-        private readonly  float _placementDistance;
+        private readonly float _placementDistance;
         private readonly Lift _lift;
         private readonly LayerMask _layerMask;
 
@@ -16,7 +18,11 @@ namespace BuilderStory
 
         private Coroutine _placing;
 
-        public PlacementState(Animator animator, Lift lift, float placementDistance, LayerMask layerMask)
+        public PlacementState(
+            Animator animator,
+            Lift lift,
+            float placementDistance,
+            LayerMask layerMask)
         {
             _animator = animator;
             _lift = lift;
@@ -44,7 +50,10 @@ namespace BuilderStory
                 return false;
             }
 
-            var colliders = Physics.OverlapSphere(_lift.transform.position, _placementDistance, _layerMask);
+            var colliders = Physics.OverlapSphere(
+                _lift.transform.position,
+                _placementDistance,
+                _layerMask);
 
             if (colliders.Length == 0)
             {

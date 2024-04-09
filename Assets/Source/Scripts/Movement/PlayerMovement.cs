@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace BuilderStory
+namespace BuilderStory.Movement
 {
     [RequireComponent(typeof(Rigidbody))]
     public class PlayerMovement : MonoBehaviour
@@ -50,7 +50,10 @@ namespace BuilderStory
                 _animator.SetFloat(Speed, MinSpeed);
             }
 
-            if (Physics.Linecast(_groundCheck.position, _groundCheck.position + Vector3.down * _checkDistance) == false)
+            if (Physics
+                .Linecast(
+                    _groundCheck.position,
+                    _groundCheck.position + (Vector3.down * _checkDistance)) == false)
             {
                 _animator.SetFloat(Speed, MinSpeed);
             }
@@ -64,7 +67,6 @@ namespace BuilderStory
         private Vector3 GetDirection()
         {
             var joystickDirection = new Vector3(_joystick.Horizontal, PositionY, _joystick.Vertical);
-
 
             var horizontal = Input.GetAxis(Horizontal);
             var vertical = Input.GetAxis(Vertical);
@@ -82,7 +84,12 @@ namespace BuilderStory
         private void Rotate(Vector3 direction)
         {
             Quaternion rotation = Quaternion.LookRotation(direction);
-            _rigidbody.MoveRotation(Quaternion.RotateTowards(_rigidbody.rotation, rotation, _rotationSpeed * Time.fixedDeltaTime));
+            _rigidbody
+                .MoveRotation(
+                    Quaternion.RotateTowards(
+                        _rigidbody.rotation,
+                        rotation,
+                        _rotationSpeed * Time.fixedDeltaTime));
         }
     }
 }

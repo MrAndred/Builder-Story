@@ -1,7 +1,15 @@
 using System.Collections.Generic;
+using BuilderStory.Audio;
+using BuilderStory.Config.Audio;
+using BuilderStory.Navigation;
+using BuilderStory.Observer;
+using BuilderStory.Pool;
+using BuilderStory.Saves;
+using BuilderStory.Struct;
+using BuilderStory.WorkerSystem;
 using UnityEngine;
 
-namespace BuilderStory
+namespace BuilderStory.Root
 {
     public class WorkersRoot : MonoBehaviour
     {
@@ -16,6 +24,8 @@ namespace BuilderStory
         private Structure[] _structures;
         private Navigator _navigator;
         private ProgressSaves _saveObject;
+        private AudioManager _audioManager;
+        private AudioMap _audioMap;
 
         private void OnDisable()
         {
@@ -41,21 +51,27 @@ namespace BuilderStory
             ProgressSaves saves,
             InventoryObserver inventoryObserver,
             Structure[] structures,
-            Navigator navigator
-            )
+            Navigator navigator,
+            AudioManager audioManager,
+            AudioMap audioMap)
         {
             _inventoryObserver = inventoryObserver;
             _structures = structures;
             _navigator = navigator;
             _saveObject = saves;
+            _audioManager = audioManager;
+            _audioMap = audioMap;
 
-            _workerPool = new ObjectPool<Worker>(_workerTemplates.GetSkin(level), DefaultWorkersCount, gameObject.transform);
+            _workerPool = new ObjectPool<Worker>(
+                _workerTemplates.GetSkin(level),
+                DefaultWorkersCount,
+                gameObject.transform);
 
             for (int i = 0; i < _saveObject.WorkersCount; i++)
             {
                 var worker = _workerPool.GetAvailable();
                 worker.gameObject.SetActive(true);
-                worker.Init(_structures, _navigator, _saveObject);
+                worker.Init(_structures, _navigator, _saveObject, audioManager, _audioMap);
 
                 _workers.Add(worker);
                 _inventoryObserver.Subscribe(worker.Lift);
@@ -69,7 +85,7 @@ namespace BuilderStory
             for (int i = 0; i < count - _workerPool.ActiveCount; i++)
             {
                 var worker = _workerPool.GetAvailable();
-                worker.Init(_structures, _navigator, _saveObject);
+                worker.Init(_structures, _navigator, _saveObject, _audioManager, _audioMap);
                 worker.gameObject.SetActive(true);
 
                 _inventoryObserver.Subscribe(worker.Lift);

@@ -1,11 +1,17 @@
 using Agava.WebUtility;
+using BuilderStory.Audio;
 using UnityEngine;
 
-namespace BuilderStory
+namespace BuilderStory.Pause
 {
     public class PauseSystem : MonoBehaviour
     {
-        public static PauseSystem Instance { get; private set; }
+        private AudioManager _audioManager;
+
+        public PauseSystem(AudioManager audioManager)
+        {
+            _audioManager = audioManager;
+        }
 
         public bool IsFocusPaused { get; private set; } = false;
 
@@ -13,15 +19,11 @@ namespace BuilderStory
 
         private void OnEnable()
         {
-            Instance = this;
-
             WebApplication.InBackgroundChangeEvent += OnBackgroundChange;
         }
 
         private void OnDisable()
         {
-            Instance = null;
-
             WebApplication.InBackgroundChangeEvent -= OnBackgroundChange;
         }
 
@@ -31,7 +33,7 @@ namespace BuilderStory
             {
                 FocusPauseGame();
             }
-            else if (focus == true && IsFocusPaused == true && IsAdPaused == false)
+            else if (focus && IsFocusPaused && IsAdPaused == false)
             {
                 FocusResumeGame();
             }
@@ -39,15 +41,21 @@ namespace BuilderStory
 
         public void FocusPauseGame()
         {
-            if (IsFocusPaused == true) return;
+            if (IsFocusPaused)
+            {
+                return;
+            }
 
-            PauseGame(); 
+            PauseGame();
             IsFocusPaused = true;
         }
 
         public void AdPauseGame()
         {
-            if (IsAdPaused == true) return;
+            if (IsAdPaused)
+            {
+                return;
+            }
 
             PauseGame();
             IsAdPaused = true;
@@ -55,7 +63,10 @@ namespace BuilderStory
 
         public void AdResumeGame()
         {
-            if (IsAdPaused == false) return;
+            if (IsAdPaused == false)
+            {
+                return;
+            }
 
             ResumeGame();
             IsAdPaused = false;
@@ -63,7 +74,10 @@ namespace BuilderStory
 
         public void FocusResumeGame()
         {
-            if (IsFocusPaused == false) return;
+            if (IsFocusPaused == false)
+            {
+                return;
+            }
 
             ResumeGame();
             IsFocusPaused = false;
@@ -71,11 +85,11 @@ namespace BuilderStory
 
         private void OnBackgroundChange(bool isInBackground)
         {
-            if (isInBackground == true && IsFocusPaused == false && IsAdPaused == false)
+            if (isInBackground && IsFocusPaused == false && IsAdPaused == false)
             {
                 FocusPauseGame();
             }
-            else if (isInBackground == false && IsFocusPaused == true && IsAdPaused == false)
+            else if (isInBackground == false && IsFocusPaused && IsAdPaused == false)
             {
                 FocusResumeGame();
             }
@@ -84,13 +98,13 @@ namespace BuilderStory
         private void PauseGame()
         {
             Time.timeScale = 0f;
-            AudioManager.Instance.PauseAll();
+            _audioManager.PauseAll();
         }
 
         private void ResumeGame()
         {
             Time.timeScale = 1;
-            AudioManager.Instance.ResumeAll();
+            _audioManager.ResumeAll();
         }
     }
 }

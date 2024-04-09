@@ -1,9 +1,9 @@
-using UnityEngine;
-using DG.Tweening;
-using UnityEngine.UI;
 using System;
+using DG.Tweening;
+using UnityEngine;
+using UnityEngine.UI;
 
-namespace BuilderStory
+namespace BuilderStory.Upgrades
 {
     public class UpgradeTab : MonoBehaviour
     {
@@ -11,14 +11,13 @@ namespace BuilderStory
         private const float CloseDuration = 0.25f;
         private readonly Color NormalColor = Color.white;
 
-
         [SerializeField] private CanvasGroup _upgradeCanvas;
         [SerializeField] private Button _upgradeTabButton;
 
         private Tweener _openTweener;
         private Tweener _closeTweener;
 
-        public event Action<UpgradeTab> OnTabOpened;
+        public event Action<UpgradeTab> TabOpened;
 
         private void OnDisable()
         {
@@ -33,10 +32,13 @@ namespace BuilderStory
         public void CloseUpgradeTab()
         {
             _closeTweener?.Kill();
-            _closeTweener = _upgradeCanvas.transform.DOScale(Vector3.zero, CloseDuration).SetEase(Ease.Linear).OnComplete(() =>
-            {
-                _upgradeCanvas.gameObject.SetActive(false);
-            });
+            _closeTweener = _upgradeCanvas.transform
+                .DOScale(Vector3.zero, CloseDuration)
+                .SetEase(Ease.Linear)
+                .OnComplete(() =>
+                    {
+                        _upgradeCanvas.gameObject.SetActive(false);
+                    });
 
             SetClosed();
         }
@@ -47,7 +49,9 @@ namespace BuilderStory
             _upgradeCanvas.transform.localScale = Vector3.zero;
 
             _openTweener?.Kill();
-            _openTweener = _upgradeCanvas.transform.DOScale(Vector3.one, OpenDuration).SetEase(Ease.Linear);
+            _openTweener = _upgradeCanvas.transform
+                .DOScale(Vector3.one, OpenDuration)
+                .SetEase(Ease.Linear);
 
             SetOpened();
         }
@@ -71,7 +75,7 @@ namespace BuilderStory
 
         private void OnUpgradeTabButtonClicked()
         {
-            OnTabOpened?.Invoke(this);
+            TabOpened?.Invoke(this);
         }
     }
 }

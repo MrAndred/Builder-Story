@@ -1,6 +1,10 @@
+using BuilderStory.Audio;
+using BuilderStory.Config.Audio;
+using BuilderStory.Config.BuildMaterial;
+using BuilderStory.Struct;
 using UnityEngine;
 
-namespace BuilderStory
+namespace BuilderStory.Root
 {
     public class StructuresRoot : MonoBehaviour
     {
@@ -8,11 +12,15 @@ namespace BuilderStory
 
         public Structure[] Structures => _structures;
 
-        public void Init(BuildMaterialMap buildMaterialMap, Material highlight)
+        public void Init(
+            BuildMaterialMap buildMaterialMap,
+            Material highlight,
+            AudioManager audioManager,
+            AudioMap audioMap)
         {
             foreach (var structure in _structures)
             {
-                structure.Init(buildMaterialMap, highlight);
+                structure.Init(buildMaterialMap, highlight, audioManager, audioMap);
             }
         }
 

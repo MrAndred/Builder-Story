@@ -1,13 +1,14 @@
 ﻿using System;
+using BuilderStory.BuildingMaterial;
 using UnityEngine;
 
-namespace BuilderStory
+namespace BuilderStory.Lifting
 {
     public interface ILiftable
     {
-        public event Action<ILiftable> OnPickedUp;
+        public event Action<ILiftable> PickedUp;
 
-        public event Action<ILiftable> OnPlaced;
+        public event Action<ILiftable> Placed;
 
         public Vector3 Position { get; }
 

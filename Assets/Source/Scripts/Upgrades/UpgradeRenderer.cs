@@ -1,8 +1,11 @@
+using BuilderStory.Saves;
+using BuilderStory.UI.Canvases;
+using BuilderStory.WalletSystem;
 using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace BuilderStory
+namespace BuilderStory.Upgrades
 {
     public class UpgradeRenderer : MonoBehaviour
     {
@@ -19,7 +22,6 @@ namespace BuilderStory
         [SerializeField] private WorkerUpgradesCanvas _workerUpgradesCanvas;
 
         private UpgradeTab _currentTab;
-        private Wallet _wallet;
 
         private Tweener _openTweener;
         private Tweener _closeTweener;
@@ -29,7 +31,7 @@ namespace BuilderStory
             foreach (var tab in _upgradeTabs)
             {
                 tab.Init();
-                tab.OnTabOpened += OpenUpgradeTab;
+                tab.TabOpened += OpenUpgradeTab;
             }
 
             foreach (var button in _closeButtons)
@@ -47,7 +49,7 @@ namespace BuilderStory
 
             foreach (var tab in _upgradeTabs)
             {
-                tab.OnTabOpened -= OpenUpgradeTab;
+                tab.TabOpened -= OpenUpgradeTab;
             }
         }
 
@@ -58,8 +60,6 @@ namespace BuilderStory
 
         public void Init(Wallet wallet, ProgressSaves saves)
         {
-            _wallet = wallet;
-
             _openCanvas.onClick.AddListener(OnOpenButtonClicked);
 
             _currentTab = _upgradeTabs[0];

@@ -1,11 +1,14 @@
+using System.Collections;
+using Agava.YandexGames;
+using BuilderStory.Loader;
+using BuilderStory.Pool;
+using BuilderStory.UI;
 using DG.Tweening;
+using Lean.Localization;
 using UnityEngine;
 using UnityEngine.UI;
-using Agava.YandexGames;
-using Lean.Localization;
-using System.Collections;
 
-namespace BuilderStory
+namespace BuilderStory.Leaderbord
 {
     public class LeaderbordRenderer : MonoBehaviour
     {
@@ -52,9 +55,12 @@ namespace BuilderStory
             _openView.onClick.RemoveListener(OnOpenButtonClicked);
         }
 
-        public void Init(ProgressSaves saves)
+        public void Init()
         {
-            _playerContainerPool = new ObjectPool<LBPlayerContainer>(_playerContainerPrefab, PlayersCount, _content);
+            _playerContainerPool = new ObjectPool<LBPlayerContainer>(
+                _playerContainerPrefab,
+                PlayersCount,
+                _content);
 
             _openView.onClick.AddListener(OnOpenButtonClicked);
 
@@ -73,7 +79,9 @@ namespace BuilderStory
             GetLeaderbordData();
 
             _openTweener?.Kill();
-            _openTweener = _leaderbordView.transform.DOScale(Vector3.one, OpenDuration).SetEase(Ease.OutBack);
+            _openTweener = _leaderbordView.transform
+                .DOScale(Vector3.one, OpenDuration)
+                .SetEase(Ease.OutBack);
 
             _openView.gameObject.SetActive(false);
         }
@@ -82,11 +90,14 @@ namespace BuilderStory
         {
             _closeTweener?.Kill();
 
-            _closeTweener = _leaderbordView.transform.DOScale(Vector3.zero, CloseDuration).SetEase(Ease.InBack).OnComplete(() =>
-            {
-                _leaderbordView.gameObject.SetActive(false);
-                _emptyTip.gameObject.SetActive(false);
-            });
+            _closeTweener = _leaderbordView.transform
+                .DOScale(Vector3.zero, CloseDuration)
+                .SetEase(Ease.InBack)
+                .OnComplete(() =>
+                    {
+                        _leaderbordView.gameObject.SetActive(false);
+                        _emptyTip.gameObject.SetActive(false);
+                    });
 
             _openView.gameObject.SetActive(true);
         }
@@ -96,44 +107,44 @@ namespace BuilderStory
            _playerContainerPool.Reset();
 
 #if UNITY_EDITOR
-            StartCoroutine(SimulateGetData());
-            return;
-#else 
-            if (PlayerAccount.IsAuthorized == false)
-            {
-                _emptyTip.gameObject.SetActive(false);
-                _loadingTip.gameObject.SetActive(false);
-                _notAuthorizedTip.gameObject.SetActive(true);
-                return;
-            }
 
-            Leaderboard.GetEntries(LeaderbordName, (result) =>
+           StartCoroutine(SimulateGetData());
+
+           return;
+#else
+           if (PlayerAccount.IsAuthorized == false)
            {
-               int length = result.entries.Length > PlayersCount ? PlayersCount : result.entries.Length;
-
-               if (length == 0)
-               {
-                   _emptyTip.gameObject.SetActive(true);
-                   _loadingTip.gameObject.SetActive(false);
-                   return;
-               }
-
-               for (int i = 0; i < length; i++)
-               {
-                   var entry = result.entries[i];
-
-                   if (entry.score == 0)
-                   {
-                       continue;
-                   }
-
-                   var container = _playerContainerPool.GetAvailable();
-                   container.gameObject.SetActive(true);
-
-                   container.Render(entry);
-               }
-
+               _emptyTip.gameObject.SetActive(false);
                _loadingTip.gameObject.SetActive(false);
+               _notAuthorizedTip.gameObject.SetActive(true);
+               return;
+           }
+
+           Leaderboard.GetEntries(LeaderbordName, (result) =>
+           {
+              int length = result.entries.Length > PlayersCount ? PlayersCount : result.entries.Length;
+
+              if (length == 0)
+              {
+                  _emptyTip.gameObject.SetActive(true);
+                  _loadingTip.gameObject.SetActive(false);
+                  return;
+              }
+
+              for (int i = 0; i < length; i++)
+              {
+                  var entry = result.entries[i];
+                  if (entry.score == 0)
+                  {
+                      continue;
+                  }
+
+                  var container = _playerContainerPool.GetAvailable();
+                  container.gameObject.SetActive(true);
+                  container.Render(entry);
+              }
+
+              _loadingTip.gameObject.SetActive(false);
            });
 #endif
         }

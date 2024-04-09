@@ -1,6 +1,7 @@
 using System;
+using BuilderStory.Saves;
 
-namespace BuilderStory
+namespace BuilderStory.ReputationSystem
 {
     public class Reputation
     {
@@ -17,6 +18,7 @@ namespace BuilderStory
         }
 
         public event Action ReputationChanged;
+
         public event Action ReachedMaxReputation;
 
         public int Max { get; private set; }
