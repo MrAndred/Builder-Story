@@ -31,7 +31,7 @@ namespace BuilderStory.UI
         {
             _saves = saves;
             _wallet = wallet;
-            _pauseSystem= pauseSystem;
+            _pauseSystem = pauseSystem;
 
             _moneyAdd.OnClick += AddClick;
             _moneyMultiplier.OnClick += MuliplierClick;
@@ -54,7 +54,7 @@ namespace BuilderStory.UI
         private void ShowRewarded(Action onRewarded)
         {
             _pauseSystem.AdPauseGame();
-#if UNITY_EDITOR == true
+#if UNITY_EDITOR
             _pauseSystem.AdResumeGame();
             return;
 #else

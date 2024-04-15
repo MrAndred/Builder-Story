@@ -78,7 +78,7 @@ namespace BuilderStory.Observer
         {
             foreach (var structure in _structures)
             {
-                if (structure.IsBuilding == true && structure.IsBuilt() == false)
+                if (structure.IsBuilding && structure.IsBuilt() == false)
                 {
                     return structure;
                 }

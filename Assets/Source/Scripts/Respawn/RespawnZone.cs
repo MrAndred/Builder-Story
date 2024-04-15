@@ -7,7 +7,7 @@ namespace BuilderStory.Respawn
     {
         public void OnTriggerEnter(Collider other)
         {
-            if (other.TryGetComponent(out Player player) == true)
+            if (other.TryGetComponent(out Player player))
             {
                 player.Respawn();
             }

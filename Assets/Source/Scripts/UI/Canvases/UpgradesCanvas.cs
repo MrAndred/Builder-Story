@@ -7,8 +7,9 @@ namespace BuilderStory.UI.Canvases
 {
     public abstract class UpgradesCanvas : MonoBehaviour
     {
-        public Wallet Wallet;
-        public ProgressSaves Saves;
+        public Wallet Wallet { get; private set; }
+
+        public ProgressSaves Saves { get; private set; }
 
         public void Init(Wallet wallet, ProgressSaves saves)
         {

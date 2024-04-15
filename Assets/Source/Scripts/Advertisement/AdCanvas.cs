@@ -1,12 +1,12 @@
-using BuilderStory.Pause;
 using System.Collections;
+using BuilderStory.Pause;
 using UnityEngine;
 
 namespace BuilderStory.Advertisement
 {
     public class AdCanvas : MonoBehaviour
     {
-#if UNITY_EDITOR == true
+#if UNITY_EDITOR
         private const float SecondsDelayToShowInterstitialAd = 75;
 #else
         private const float SecondsDelayToShowInterstitialAd = 75;

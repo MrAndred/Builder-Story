@@ -16,8 +16,7 @@ namespace BuilderStory.Struct
             BuildMaterial material,
             MeshRenderer meshRenderer,
             Material defaultMaterial,
-            Material highlighted
-            )
+            Material highlighted)
         {
             IsPlaced = false;
             Material = material;

@@ -31,7 +31,7 @@ namespace BuilderStory.Upgrades
             foreach (var tab in _upgradeTabs)
             {
                 tab.Init();
-                tab.TabOpened += OpenUpgradeTab;
+                tab.Opened += OpenUpgradeTab;
             }
 
             foreach (var button in _closeButtons)
@@ -49,7 +49,7 @@ namespace BuilderStory.Upgrades
 
             foreach (var tab in _upgradeTabs)
             {
-                tab.TabOpened -= OpenUpgradeTab;
+                tab.Opened -= OpenUpgradeTab;
             }
         }
 
