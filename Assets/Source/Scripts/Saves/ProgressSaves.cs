@@ -74,27 +74,25 @@ namespace BuilderStory.Saves
 
         public void LoadData(MonoBehaviour objectInstance)
         {
-#if UNITY_EDITOR == true
+#if UNITY_EDITOR
             objectInstance.StartCoroutine(SimulateInit());
             return;
 #else
             Agava.YandexGames.PlayerAccount.GetCloudSaveData((data) =>
             {
-                var saves = new ProgressDTO();
-
                 var json = JsonUtility.FromJson<ProgressDTO>(data);
 
                 _playerModel = new PlayerModel(json.PlayerSpeedLevel, json.PlayerCapacityLevel);
-                
+
                 _workerModel = new WorkerModel(
-                    json.WorkersCountLevel, 
-                    json.WorkersSpeedLevel, 
+                    json.WorkersCountLevel,
+                    json.WorkersSpeedLevel,
                     json.WorkersCapacityLevel);
 
                 _progressModel = new ProgressModel(
-                    json.Reputation, 
-                    json.Money, 
-                    json.MoneyMultiplier, 
+                    json.Reputation,
+                    json.Money,
+                    json.MoneyMultiplier,
                     json.Level);
 
                 DataLoaded?.Invoke();
@@ -106,23 +104,21 @@ namespace BuilderStory.Saves
 
         public void SaveData()
         {
-#if UNITY_EDITOR == true
+#if UNITY_EDITOR
             return;
 #else
-            ProgressDTO Saves = new ProgressDTO
-            {
-                PlayerSpeedLevel = _playerModel.SpeedLevel,
-                PlayerCapacityLevel = _playerModel.CapacityLevel,
-                WorkersCountLevel = _workerModel.CountLevel,
-                WorkersSpeedLevel = _workerModel.SpeedLevel,
-                WorkersCapacityLevel = _workerModel.CapacityLevel,
-                Reputation = _progressModel.Reputation,
-                Money = _progressModel.Money,
-                MoneyMultiplier = _progressModel.MoneyMultiplier,
-                Level = _progressModel.Level
-            };
+            ProgressDTO saves = new ProgressDTO (
+                _progressModel.Money,
+                _progressModel.MoneyMultiplier,
+                _progressModel.Level,
+                _progressModel.Reputation,
+                _playerModel.SpeedLevel,
+                _playerModel.CapacityLevel,
+                _workerModel.CountLevel,
+                _workerModel.SpeedLevel,
+                _workerModel.CapacityLevel);
 
-            Agava.YandexGames.PlayerAccount.SetCloudSaveData(JsonUtility.ToJson(Saves));
+            Agava.YandexGames.PlayerAccount.SetCloudSaveData(JsonUtility.ToJson(saves));
             Agava.YandexGames.Leaderboard.SetScore(LeaderbordName, _progressModel.Reputation);
 #endif
         }

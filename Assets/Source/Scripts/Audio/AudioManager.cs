@@ -9,9 +9,8 @@ namespace BuilderStory.Audio
         private const int MuteOn = 1;
         private const float MusicVolume = 0.35f;
 
-        public static AudioManager Instance { get; private set; }
-
         private AudioSource _musicSource;
+
         private AudioSource _sfxSource;
 
         public bool IsMuted => _musicSource.mute;
@@ -19,16 +18,6 @@ namespace BuilderStory.Audio
         public void Init()
         {
             bool muted = PlayerPrefs.GetInt(Muted, MuteOff) == MuteOn;
-
-            if (Instance == null)
-            {
-                Instance = this;
-                DontDestroyOnLoad(gameObject);
-            }
-            else
-            {
-                Destroy(gameObject);
-            }
 
             if (_musicSource == null)
             {

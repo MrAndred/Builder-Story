@@ -8,9 +8,11 @@ namespace BuilderStory.Movement
         private const float _checkDistance = 1f;
         private const float PositionY = 0f;
         private const float MinSpeed = 0f;
-        private const string Speed = "Speed";
+
         private const string Vertical = "Vertical";
         private const string Horizontal = "Horizontal";
+
+        private static readonly int Speed = Animator.StringToHash("Speed");
 
         [SerializeField] private Animator _animator;
         [SerializeField] private Joystick _joystick;

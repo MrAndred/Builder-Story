@@ -42,7 +42,7 @@ namespace BuilderStory.Root
 
         private IEnumerator GetDataAndLoadScene()
         {
-            yield return new WaitUntil(() => _dataReceived == true);
+            yield return new WaitUntil(() => _dataReceived);
 
             yield return StartCoroutine(
                 LoadSceneWithProgressBar(

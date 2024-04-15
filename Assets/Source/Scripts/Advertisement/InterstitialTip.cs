@@ -31,7 +31,7 @@ namespace BuilderStory.Advertisement
         public void Show()
         {
             _pauseSystem.AdPauseGame();
-#if UNITY_EDITOR == true
+#if UNITY_EDITOR
             ResumeGame();
             return;
 #else
@@ -54,7 +54,7 @@ namespace BuilderStory.Advertisement
                 yield return delay;
             }
 
-#if UNITY_EDITOR == true
+#if UNITY_EDITOR
             StartCoroutine(SimulateAd());
 #else
             Agava.YandexGames.InterstitialAd.Show(

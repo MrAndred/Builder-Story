@@ -17,7 +17,7 @@ namespace BuilderStory.Upgrades
         private Tweener _openTweener;
         private Tweener _closeTweener;
 
-        public event Action<UpgradeTab> TabOpened;
+        public event Action<UpgradeTab> Opened;
 
         private void OnDisable()
         {
@@ -75,7 +75,7 @@ namespace BuilderStory.Upgrades
 
         private void OnUpgradeTabButtonClicked()
         {
-            TabOpened?.Invoke(this);
+            Opened?.Invoke(this);
         }
     }
 }

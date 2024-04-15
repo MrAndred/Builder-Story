@@ -85,7 +85,7 @@ namespace BuilderStory.UI
             var seconds = 1;
             var delay = new WaitForSecondsRealtime(seconds);
 
-            while (_pauseSystem.IsFocusPaused == true || _pauseSystem.IsAdPaused == true)
+            while (_pauseSystem.IsFocusPaused || _pauseSystem.IsAdPaused)
             {
                 yield return delay;
             }

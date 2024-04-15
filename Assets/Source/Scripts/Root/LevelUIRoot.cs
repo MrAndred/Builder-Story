@@ -32,7 +32,7 @@ namespace BuilderStory.Root
         {
             if (_reputation != null)
             {
-                _reputation.ReputationChanged += OnReachedMaxReputation;
+                _reputation.Changed += OnReachedMaxReputation;
             }
         }
 
@@ -40,7 +40,7 @@ namespace BuilderStory.Root
         {
             if (_reputation != null)
             {
-                _reputation.ReputationChanged -= OnReachedMaxReputation;
+                _reputation.Changed -= OnReachedMaxReputation;
             }
         }
 
@@ -64,7 +64,7 @@ namespace BuilderStory.Root
             _nextLevelButton.Init(saveObject, pauseSystem);
             _boostersGroup.Init(saveObject, wallet, pauseSystem);
 
-            _reputation.ReachedMaxReputation += OnReachedMaxReputation;
+            _reputation.ReachedMax += OnReachedMaxReputation;
         }
 
         private void OnReachedMaxReputation()

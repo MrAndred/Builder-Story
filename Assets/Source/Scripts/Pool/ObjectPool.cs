@@ -3,7 +3,8 @@ using UnityEngine;
 
 namespace BuilderStory.Pool
 {
-    public class ObjectPool<T>  where T : MonoBehaviour
+    public class ObjectPool<T>
+        where T : MonoBehaviour
     {
         private T _prefab;
         private int _poolSize;

@@ -75,7 +75,7 @@ namespace BuilderStory.Struct
             AudioMap audioMap)
         {
             _audioManager = audioManager;
-            _audioMap= audioMap;
+            _audioMap = audioMap;
             _tip?.Init();
 
             var materials = GetComponentsInChildren<BuildMaterial>();
@@ -211,7 +211,7 @@ namespace BuilderStory.Struct
         {
             foreach (var material in _structMaterials)
             {
-                if (material.Highlighted == true)
+                if (material.Highlighted)
                 {
                     material.RemoveHighlight();
                 }
@@ -220,7 +220,7 @@ namespace BuilderStory.Struct
 
         public void Highlight(ILiftable material)
         {
-            if (IsBuilding == false || IsBuilt() == true)
+            if (IsBuilding == false || IsBuilt())
             {
                 return;
             }
@@ -240,7 +240,7 @@ namespace BuilderStory.Struct
 
         public void Unhighlight(ILiftable material)
         {
-            if (IsBuilding == false || IsBuilt() == true)
+            if (IsBuilding == false || IsBuilt())
             {
                 return;
             }
@@ -249,7 +249,7 @@ namespace BuilderStory.Struct
             {
                 var structMaterial = _structMaterials[i];
 
-                if (structMaterial.Highlighted == true && structMaterial.Material.Type == material.Type)
+                if (structMaterial.Highlighted && structMaterial.Material.Type == material.Type)
                 {
                     structMaterial.RemoveHighlight();
                     return;
@@ -266,7 +266,7 @@ namespace BuilderStory.Struct
 
             structMaterial.Place();
 
-            if (IsBuilt() == true)
+            if (IsBuilt())
             {
                 FinishBuild();
             }
@@ -295,7 +295,7 @@ namespace BuilderStory.Struct
             _materials[material.Type] -= materialCount;
             Placed?.Invoke();
 
-            if (IsBuilt() == true)
+            if (IsBuilt())
             {
                 _buildEffect.Play();
             }
